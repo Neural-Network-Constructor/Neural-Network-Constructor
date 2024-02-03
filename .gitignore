@@ -1,2 +1,4 @@
 build/
 .obsidian/
+.idea
+Front/cmake-build-debug
