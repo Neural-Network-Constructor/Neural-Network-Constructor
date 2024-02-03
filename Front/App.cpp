@@ -1,4 +1,5 @@
 #include "App.h"
+// федя титов лучший
 
 App::App(int width, int height) {
     number_ = "";
