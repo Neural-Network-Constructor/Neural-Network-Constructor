@@ -1,4 +1,6 @@
 #include "header.h"
+#include "Node.h"
+#pragma once
 
 class App : public QMainWindow {
     Q_OBJECT
@@ -17,7 +19,16 @@ private slots:
     void gotoEditor();
     void gotoSimulator();
 
+    void createInNeuron();
+    void createFNNNeuron();
+    void createOutNeuron();
+
+    void drawInNeuron();
+    void drawFNNNeuron();
+    void drawOutNeuron();
+
 private:
+    std::vector<Node*> nodes_;
     QWidget* window_;
     QLabel* base_line_;
     QPushButton* begin_button_;
@@ -36,6 +47,12 @@ private:
     QGraphicsView* edit_tablet_;
     QGraphicsScene* edit_scene_;
     QPainter* painter_;
+
+    QWidget* creating_tablet_;
+    QLineEdit* x_coord_;
+    QLineEdit* y_coord_;
+    QPushButton* neuron_painter_;
+
 
     QLabel* simulation_;
     QLabel* pokapohui2_;

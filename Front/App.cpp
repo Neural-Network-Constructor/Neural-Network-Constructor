@@ -83,25 +83,28 @@ App::App(int width, int height) {
     editor_->move(225, 10);
     editor_->resize(760, 570);
     editor_->setStyleSheet("QLabel {"
-                          "background: #000000 }");
+                          "background: #404040 }");
 
     in_neuron_ = new QPushButton(editor_);
     in_neuron_->resize(100, 100);
     in_neuron_->move(10, 10);
     in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
                                             "border-radius: 50px; }");
+    connect(in_neuron_, SIGNAL (released()), this, SLOT (createInNeuron()));
 
     fnn_neuron_ = new QPushButton(editor_);
     fnn_neuron_->resize(100, 100);
     fnn_neuron_->move(10, 120);
     fnn_neuron_->setStyleSheet("QPushButton {background: #4bdfda;"
                                             "border-radius: 50px; }");
+    connect(fnn_neuron_, SIGNAL (released()), this, SLOT (createFNNNeuron()));
 
     out_neuron_ = new QPushButton(editor_);
     out_neuron_->resize(100, 100);
     out_neuron_->move(10, 230);
     out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
                                             "border-radius: 50px; }");
+    connect(out_neuron_, SIGNAL (released()), this, SLOT (createOutNeuron()));
 
     edit_tablet_ = new QGraphicsView(editor_);
     edit_tablet_->resize(650, 570);
@@ -110,11 +113,14 @@ App::App(int width, int height) {
                                 "background: #d5d5d5; }");
 
     edit_scene_ = new QGraphicsScene();
-    edit_scene_->setBackgroundBrush(QColor(255,255,255));
+    edit_scene_->setBackgroundBrush(QColor(64, 64, 64));
     edit_tablet_->setScene(edit_scene_);
-
-
-
+    for (int i = -1000; i <= 1000; i += 25) {
+        edit_scene_->addLine(i, -1000, i, 1000);
+    }
+    for  (int i = -1000; i <= 1000; i += 25) {
+        edit_scene_->addLine(-1000, i, 1000, i);
+    }
 
 // РАБОТА СО СТРАНИЦЕЙ СИМУЛЯЦИИ
 
@@ -171,4 +177,116 @@ void App::gotoSimulator() {
     simulation_->show();
 }
 
+void App::createInNeuron() {
+    creating_tablet_ = new QWidget();
+    creating_tablet_->resize(170, 70);
+    creating_tablet_->setStyleSheet("QWidget {"
+                                    "background: 000000; }");
+    x_coord_ = new QLineEdit(creating_tablet_);
+    y_coord_ = new QLineEdit(creating_tablet_);
+    x_coord_->resize(90, 22);
+    x_coord_->move(5, 10);
+    x_coord_->setPlaceholderText("введите x");
+    y_coord_->resize(90, 22);
+    y_coord_->move(5, 40);
+    y_coord_->setPlaceholderText("введите y");
+
+    neuron_painter_ = new QPushButton(creating_tablet_);
+    neuron_painter_->resize(65, 30);
+    neuron_painter_->move(100, 35);
+    neuron_painter_->setText("СОЗДАТЬ");
+    neuron_painter_->setStyleSheet("QPushButton { color: #ffffff;"
+                                   "background: #404040;"
+                                   "border-radius: 5px; }");
+    connect(neuron_painter_, SIGNAL (released()), this, SLOT (drawInNeuron()));
+
+    creating_tablet_->show();
+
+}
+
+void App::createFNNNeuron() {
+    creating_tablet_ = new QWidget();
+    creating_tablet_->resize(170, 70);
+    creating_tablet_->setStyleSheet("QWidget {"
+                                    "background: 000000; }");
+    x_coord_ = new QLineEdit(creating_tablet_);
+    y_coord_ = new QLineEdit(creating_tablet_);
+    x_coord_->resize(90, 22);
+    x_coord_->move(5, 10);
+    x_coord_->setPlaceholderText("введите x");
+    y_coord_->resize(90, 22);
+    y_coord_->move(5, 40);
+    y_coord_->setPlaceholderText("введите y");
+
+    neuron_painter_ = new QPushButton(creating_tablet_);
+    neuron_painter_->resize(65, 30);
+    neuron_painter_->move(100, 35);
+    neuron_painter_->setText("СОЗДАТЬ");
+    neuron_painter_->setStyleSheet("QPushButton { color: #ffffff;"
+                                   "background: #404040;"
+                                   "border-radius: 5px; }");
+    connect(neuron_painter_, SIGNAL (released()), this, SLOT (drawFNNNeuron()));
+
+    creating_tablet_->show();
+}
+
+void App::createOutNeuron() {
+    creating_tablet_ = new QWidget();
+    creating_tablet_->resize(170, 70);
+    creating_tablet_->setStyleSheet("QWidget {"
+                                    "background: 000000; }");
+    x_coord_ = new QLineEdit(creating_tablet_);
+    y_coord_ = new QLineEdit(creating_tablet_);
+    x_coord_->resize(90, 22);
+    x_coord_->move(5, 10);
+    x_coord_->setPlaceholderText("введите x");
+    y_coord_->resize(90, 22);
+    y_coord_->move(5, 40);
+    y_coord_->setPlaceholderText("введите y");
+
+    neuron_painter_ = new QPushButton(creating_tablet_);
+    neuron_painter_->resize(65, 30);
+    neuron_painter_->move(100, 35);
+    neuron_painter_->setText("СОЗДАТЬ");
+    neuron_painter_->setStyleSheet("QPushButton { color: #ffffff;"
+                                   "background: #404040;"
+                                   "border-radius: 5px; }");
+    connect(neuron_painter_, SIGNAL (released()), this, SLOT (drawOutNeuron()));
+
+    creating_tablet_->show();
+}
+
+
+void App::drawInNeuron() {
+    int x = x_coord_->text().toInt();
+    int y = y_coord_->text().toInt();
+    delete x_coord_;
+    delete y_coord_;
+    delete neuron_painter_;
+    delete creating_tablet_;
+    nodes_.push_back(new Node(x, y, 50, Neurons::In));
+    edit_scene_->addItem(nodes_.back());
+}
+
+void App::drawFNNNeuron() {
+    int x = x_coord_->text().toInt();
+    int y = y_coord_->text().toInt();
+    delete x_coord_;
+    delete y_coord_;
+    delete neuron_painter_;
+    delete creating_tablet_;
+    nodes_.push_back(new Node(x, y, 50, Neurons::FNN));
+    edit_scene_->addItem(nodes_.back());
+}
+
+void App::drawOutNeuron() {
+    int x = x_coord_->text().toInt();
+    int y = y_coord_->text().toInt();
+    delete x_coord_;
+    delete y_coord_;
+    delete neuron_painter_;
+    delete creating_tablet_;
+    nodes_.push_back(new Node(x, y, 50, Neurons::Out));
+    edit_scene_->addItem(nodes_.back());
+}
 
