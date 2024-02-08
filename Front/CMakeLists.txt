@@ -16,7 +16,9 @@ find_package(Qt6 COMPONENTS
 add_executable(NNC main.cpp
         App.cpp
         App.h
-        header.h)
+        header.h
+        Node.cpp
+        Node.h)
 target_link_libraries(NNC
         Qt::Core
         Qt::Gui
