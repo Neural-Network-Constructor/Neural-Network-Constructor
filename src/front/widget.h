@@ -1,9 +1,8 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#pragma once
 
 #include <QWidget>
 #include "graphwidget.h"
-#include "../../../widGraphMAIN/node.h"
+#include "Node.h"
 #include "Edge.h"
 
 namespace Ui {
@@ -12,14 +11,14 @@ namespace Ui {
 
 class Widget : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     explicit Widget(QWidget *parent = nullptr);
     ~Widget();
 
 private slots:
-            void on_btnCreateNode_clicked();
+    void on_btnCreateNode_clicked();
     void on_btnDelete_clicked();
     void on_btnConnectNode_clicked();
     void graphWidgetClicked(QMouseEvent *event);
@@ -35,5 +34,3 @@ namespace CONN {
         NEED_DEST
     };
 }
-
-#endif // WIDGET_H

@@ -1,6 +1,4 @@
-#ifndef GRAPHWIDGET_H
-#define GRAPHWIDGET_H
-
+#pragma once
 #include <QGraphicsView>
 
 class Node;
@@ -15,7 +13,7 @@ public:
     void itemMoved();
 
 public slots:
-            void shuffle();
+    void shuffle();
     void zoomIn();
     void zoomOut();
 
@@ -26,9 +24,7 @@ protected:
 #endif
     void mousePressEvent(QMouseEvent *event) override;
     void scaleView(qreal scaleFactor);
-
     signals:
-            void mousePressedSignal(QMouseEvent *event);
+    void mousePressedSignal(QMouseEvent *event);
 };
 
-#endif // GRAPHWIDGET_H

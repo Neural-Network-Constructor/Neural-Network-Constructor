@@ -104,7 +104,7 @@ App::App(int width, int height)
                                "border-radius: 50px; }");
     connect(out_neuron_, SIGNAL(released()), this, SLOT(createOutNeuron()));
 
-    edit_tablet_ = new QGraphicsView(editor_);
+    edit_tablet_ = new GraphWidget(editor_);
     edit_tablet_->resize(650, 570);
     edit_tablet_->move(120, 0);
     edit_tablet_->setStyleSheet("QGraphicsView {"
@@ -273,7 +273,7 @@ void App::drawInNeuron()
     delete y_coord_;
     delete neuron_painter_;
     delete creating_tablet_;
-    nodes_.push_back(new Node(x, y, 50, Neurons::In));
+    nodes_.push_back(new Node(0));
     edit_scene_->addItem(nodes_.back());
 }
 
@@ -285,7 +285,7 @@ void App::drawFCNNeuron()
     delete y_coord_;
     delete neuron_painter_;
     delete creating_tablet_;
-    nodes_.push_back(new Node(x, y, 50, Neurons::FCN));
+    nodes_.push_back(new Node(1));
     edit_scene_->addItem(nodes_.back());
 }
 
@@ -297,6 +297,6 @@ void App::drawOutNeuron()
     delete y_coord_;
     delete neuron_painter_;
     delete creating_tablet_;
-    nodes_.push_back(new Node(x, y, 50, Neurons::Out));
+    nodes_.push_back(new Node(2));
     edit_scene_->addItem(nodes_.back());
 }

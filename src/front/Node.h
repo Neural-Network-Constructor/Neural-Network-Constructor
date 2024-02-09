@@ -1,23 +1,42 @@
 #pragma once
+
 #include "header.h"
+#include "Edge.h"
 
-class Node: public QGraphicsItem {
+class GraphWidget;
+class QGraphicsSceneMouseEvent;
+
+class Node : public QGraphicsItem
+{
+    friend Edge::Edge(Node *sourceNode, Node *destNode);
+    friend Edge::~Edge();
 public:
-    Node();
-    Node(int x, int y, double radius, Neurons cur): x_(x), y_(y), radius_(radius), cur_(cur) {}
-    Node(const Node& node) {
-        x_ = node.x_;
-        y_ = node.y_;
-        radius_ = node.radius_;
-        cur_ = node.cur_;
-    }
-protected:
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
-    QRectF boundingRect() const override;
+    Node(int mark);
+    ~Node() override;
+    QList<Edge *> edges() const;
 
+    enum { Type = UserType + 1 };
+    int type() const override { return Type; }
+    static const int RADIUS = 30;
+    QRectF boundingRect() const override;
+    QPainterPath shape() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+               QWidget *widget) override;
+
+    bool mark() const;
+    void setMark(bool mark);
+
+protected:
+    QVariant itemChange(GraphicsItemChange change,
+                        const QVariant &value) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void addEdge(Edge *edge);
+    void removeEdge(Edge *edge);
 private:
-    double radius_;
-    int x_, y_;
-    Neurons cur_;
+    QList<Edge *> edgeList;
+    bool _mark;
 };
+
+
 

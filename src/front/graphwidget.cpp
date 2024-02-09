@@ -1,6 +1,6 @@
 #include "graphwidget.h"
 #include "Edge.h"
-#include "../../../widGraphMAIN/node.h"
+#include "Node.h"
 
 #include <cmath>
 

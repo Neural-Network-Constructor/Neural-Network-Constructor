@@ -1,5 +1,6 @@
 #include "header.h"
 #include "Node.h"
+#include "graphwidget.h"
 #pragma once
 
 class App : public QMainWindow {
