@@ -7,24 +7,24 @@ class App : public QMainWindow {
     Q_OBJECT
 
 public:
-    App(int width, int height);
-    ~App() override;
+    App(int width, int height); // конструктор
+    ~App() override; // деструктор
 
-    void render() {
+    void render() { // создание окна программы
         window_->show();
     }
 
 private slots:
-    void loadFromFile();
-    void gotoBegin();
-    void gotoEditor();
-    void gotoSimulator();
+    void loadFromFile(); // загрузка из файла
+    void gotoBegin(); // возвращение к стартовому экрану
+    void gotoEditor(); // возвращение к редактору
+    void gotoSimulator(); // возвращение к симуляции
 
-    void drawInNeuron();
-    void drawFCNNeuron();
-    void drawOutNeuron();
-    void deleteNeuron();
-    void graphWidgetClicked(QMouseEvent *event);
+    void drawInNeuron(); // рисование входного нейрона
+    void drawFCNNeuron(); // рисование основного нейрона
+    void drawOutNeuron(); // рисование выходного нейрона
+    void deleteNeuron(); // удаление нейрона
+    void graphWidgetClicked(QMouseEvent *event); // создание ребра
 
 private:
     int connProcess;
@@ -46,6 +46,7 @@ private:
     QPushButton* out_neuron_;
     QPushButton* delete_neuron_btn_;
     QPushButton* add_edge_btn_;
+    QPushButton* start_simulating_btn_;
 
     QGraphicsView* edit_tablet_;
     QGraphicsScene* edit_scene_;

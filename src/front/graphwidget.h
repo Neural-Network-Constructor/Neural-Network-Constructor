@@ -8,22 +8,22 @@ class GraphWidget : public QGraphicsView
     Q_OBJECT
 
 public:
-    GraphWidget(QWidget *parent = nullptr);
+    GraphWidget(QWidget *parent = nullptr); // конструктор
 
-    void itemMoved();
+//    void itemMoved();
 
 public slots:
-    void shuffle();
-    void zoomIn();
-    void zoomOut();
+    void shuffle(); // рандомный разброс рёбер
+    void zoomIn(); // приближение
+    void zoomOut(); // отдаление
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override; // нажатие кнопки
 #if QT_CONFIG(wheelevent)
-    void wheelEvent(QWheelEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override; // скроллинг колёсика мыши
 #endif
-    void mousePressEvent(QMouseEvent *event) override;
-    void scaleView(qreal scaleFactor);
+    void mousePressEvent(QMouseEvent *event) override; // нажатие кнопки мыши
+    void scaleView(qreal scaleFactor); // изменение масштаба
     signals:
     void mousePressedSignal(QMouseEvent *event);
 };

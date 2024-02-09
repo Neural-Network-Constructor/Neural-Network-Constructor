@@ -7,12 +7,12 @@ class Node;
 class Edge : public QGraphicsItem
 {
 public:
-    Edge(Node *sourceNode, Node *destNode);
-    ~Edge() override;
-    Node *sourceNode() const;
-    Node *destNode() const;
+    Edge(Node *sourceNode, Node *destNode); // конструктор
+    ~Edge() override; // деструктор
+    Node *sourceNode() const; // исходная вершина
+    Node *destNode() const; // целевая вершина
 
-    void adjust();
+    void adjust(); //
 
     enum { Type = UserType + 2 };
     int type() const override { return Type; }

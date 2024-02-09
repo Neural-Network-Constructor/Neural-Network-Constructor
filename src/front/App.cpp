@@ -115,7 +115,7 @@ App::App(int width, int height)
 
     add_edge_btn_ = new QPushButton(editor_);
     add_edge_btn_->resize(100, 40);
-    add_edge_btn_->move(10, 450);
+    add_edge_btn_->move(10, 390);
     add_edge_btn_->setStyleSheet("QPushButton {background: #505050;"
                                       "}");
     add_edge_btn_->setText("СОЗДАТЬ РЕБРО");
@@ -138,6 +138,15 @@ App::App(int width, int height)
     {
         edit_scene_->addLine(-1000, i, 1000, i);
     }
+
+
+    start_simulating_btn_ = new QPushButton(editor_);
+    start_simulating_btn_->resize(100, 40);
+    start_simulating_btn_->move(10, 440);
+    start_simulating_btn_->setStyleSheet("QPushButton {"
+                                "background: #505050; }");
+    start_simulating_btn_->setText("ЗАПУСК");
+    connect(start_simulating_btn_, SIGNAL(released()), this, SLOT(gotoSimulator()));
 
     // РАБОТА СО СТРАНИЦЕЙ СИМУЛЯЦИИ
 
