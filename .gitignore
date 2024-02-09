@@ -37,3 +37,4 @@ test
 .idea
 .vscode
 Front/cmake-build-debug
+cmake-build-debug
