@@ -1,8 +1,4 @@
-//
-// Created by Данил Подлягин on 08.02.2024.
-//
 #include "Node.h"
-
 
 Node::Node() {
 
@@ -14,7 +10,7 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     if (cur_ == Neurons::In) {
         painter->setBrush(QColor(96, 220, 101));
     }
-    else if (cur_ == Neurons::FNN) {
+    else if (cur_ == Neurons::FCN) {
         painter->setBrush(QColor(75, 223, 218));
     }
     else {

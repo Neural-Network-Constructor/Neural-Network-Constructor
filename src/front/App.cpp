@@ -90,12 +90,12 @@ App::App(int width, int height)
                               "border-radius: 50px; }");
     connect(in_neuron_, SIGNAL(released()), this, SLOT(createInNeuron()));
 
-    fnn_neuron_ = new QPushButton(editor_);
-    fnn_neuron_->resize(100, 100);
-    fnn_neuron_->move(10, 120);
-    fnn_neuron_->setStyleSheet("QPushButton {background: #4bdfda;"
+    fcn_neuron_ = new QPushButton(editor_);
+    fcn_neuron_->resize(100, 100);
+    fcn_neuron_->move(10, 120);
+    fcn_neuron_->setStyleSheet("QPushButton {background: #4bdfda;"
                                "border-radius: 50px; }");
-    connect(fnn_neuron_, SIGNAL(released()), this, SLOT(createFNNNeuron()));
+    connect(fcn_neuron_, SIGNAL(released()), this, SLOT(createFCNNeuron()));
 
     out_neuron_ = new QPushButton(editor_);
     out_neuron_->resize(100, 100);
@@ -211,7 +211,7 @@ void App::createInNeuron()
     creating_tablet_->show();
 }
 
-void App::createFNNNeuron()
+void App::createFCNNeuron()
 {
     creating_tablet_ = new QWidget();
     creating_tablet_->resize(170, 70);
@@ -233,7 +233,7 @@ void App::createFNNNeuron()
     neuron_painter_->setStyleSheet("QPushButton { color: #ffffff;"
                                    "background: #404040;"
                                    "border-radius: 5px; }");
-    connect(neuron_painter_, SIGNAL(released()), this, SLOT(drawFNNNeuron()));
+    connect(neuron_painter_, SIGNAL(released()), this, SLOT(drawFCNNeuron()));
 
     creating_tablet_->show();
 }
@@ -267,8 +267,8 @@ void App::createOutNeuron()
 
 void App::drawInNeuron()
 {
-    int x = x_coord_->text().toInt();
-    int y = y_coord_->text().toInt();
+    int x = x_coord_->text().toInt() * 25;
+    int y = y_coord_->text().toInt() * 25;
     delete x_coord_;
     delete y_coord_;
     delete neuron_painter_;
@@ -277,22 +277,22 @@ void App::drawInNeuron()
     edit_scene_->addItem(nodes_.back());
 }
 
-void App::drawFNNNeuron()
+void App::drawFCNNeuron()
 {
-    int x = x_coord_->text().toInt();
-    int y = y_coord_->text().toInt();
+    int x = x_coord_->text().toInt() * 25;
+    int y = y_coord_->text().toInt() * 25;
     delete x_coord_;
     delete y_coord_;
     delete neuron_painter_;
     delete creating_tablet_;
-    nodes_.push_back(new Node(x, y, 50, Neurons::FNN));
+    nodes_.push_back(new Node(x, y, 50, Neurons::FCN));
     edit_scene_->addItem(nodes_.back());
 }
 
 void App::drawOutNeuron()
 {
-    int x = x_coord_->text().toInt();
-    int y = y_coord_->text().toInt();
+    int x = x_coord_->text().toInt() * 25;
+    int y = y_coord_->text().toInt() * 25;
     delete x_coord_;
     delete y_coord_;
     delete neuron_painter_;

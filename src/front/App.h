@@ -20,11 +20,11 @@ private slots:
     void gotoSimulator();
 
     void createInNeuron();
-    void createFNNNeuron();
+    void createFCNNeuron();
     void createOutNeuron();
 
     void drawInNeuron();
-    void drawFNNNeuron();
+    void drawFCNNeuron();
     void drawOutNeuron();
 
 private:
@@ -42,7 +42,7 @@ private:
 
     QLabel* editor_;
     QPushButton* in_neuron_;
-    QPushButton* fnn_neuron_;
+    QPushButton* fcn_neuron_;
     QPushButton* out_neuron_;
     QGraphicsView* edit_tablet_;
     QGraphicsScene* edit_scene_;

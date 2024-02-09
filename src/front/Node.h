@@ -1,6 +1,3 @@
-//
-// Created by Данил Подлягин on 08.02.2024.
-//
 #pragma once
 #include "header.h"
 

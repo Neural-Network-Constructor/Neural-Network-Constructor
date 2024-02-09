@@ -27,6 +27,6 @@
 enum class Neurons
 {
     In,
-    FNN,
+    FCN,
     Out
 };
