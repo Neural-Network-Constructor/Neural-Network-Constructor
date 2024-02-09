@@ -22,6 +22,7 @@
 #include <QGraphicsView>
 #include <QBrush>
 #include <QColor>
+#include <QMouseEvent>
 #include <QGraphicsItem>
 
 enum class Neurons

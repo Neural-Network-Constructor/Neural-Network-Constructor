@@ -8,7 +8,7 @@
 #include <QPainter>
 #include <QStyleOption>
 
-Node::Node(int mark) : _mark(mark)
+Node::Node(int type) : _type(type)
 {
     setFlag(ItemIsSelectable);
     setFlag(ItemIsMovable);
@@ -64,8 +64,14 @@ QPainterPath Node::shape() const
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    if (this->_mark == 0) {
-        painter->setBrush((option->state & QStyle::State_Selected ? QColor() : QColor()));
+    if (this->_type == 0) {
+        painter->setBrush((option->state & QStyle::State_Selected ? QColor(111, 255, 116) : QColor(96, 220, 101)));
+    }
+    else if (this->_type == 1) {
+        painter->setBrush((option->state & QStyle::State_Selected ? QColor(75, 223, 218) : QColor(75, 223, 218)));
+    }
+    else if (this->_type == 2) {
+        painter->setBrush((option->state & QStyle::State_Selected ? QColor(233, 63, 63) : QColor(233, 63, 63)));
     }
     painter->setPen(QPen(_mark ? Qt::magenta : Qt::black, 2));
     painter->drawEllipse(-RADIUS, -RADIUS, 2 * RADIUS, 2 * RADIUS);

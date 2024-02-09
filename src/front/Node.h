@@ -11,7 +11,7 @@ class Node : public QGraphicsItem
     friend Edge::Edge(Node *sourceNode, Node *destNode);
     friend Edge::~Edge();
 public:
-    Node(int mark);
+    Node(int type);
     ~Node() override;
     QList<Edge *> edges() const;
 
@@ -24,6 +24,7 @@ public:
                QWidget *widget) override;
 
     bool mark() const;
+    void addEdge(Edge *edge);
     void setMark(bool mark);
 
 protected:
@@ -31,11 +32,11 @@ protected:
                         const QVariant &value) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void addEdge(Edge *edge);
     void removeEdge(Edge *edge);
 private:
     QList<Edge *> edgeList;
     bool _mark;
+    int _type;
 };
 
 

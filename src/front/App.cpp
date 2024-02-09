@@ -1,4 +1,5 @@
 #include "App.h"
+#include "widget.h"
 
 App::App(int width, int height)
 {
@@ -88,21 +89,37 @@ App::App(int width, int height)
     in_neuron_->move(10, 10);
     in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
                               "border-radius: 50px; }");
-    connect(in_neuron_, SIGNAL(released()), this, SLOT(createInNeuron()));
+    connect(in_neuron_, SIGNAL(released()), this, SLOT(drawInNeuron()));
 
     fcn_neuron_ = new QPushButton(editor_);
     fcn_neuron_->resize(100, 100);
     fcn_neuron_->move(10, 120);
     fcn_neuron_->setStyleSheet("QPushButton {background: #4bdfda;"
                                "border-radius: 50px; }");
-    connect(fcn_neuron_, SIGNAL(released()), this, SLOT(createFCNNeuron()));
+    connect(fcn_neuron_, SIGNAL(released()), this, SLOT(drawFCNNeuron()));
 
     out_neuron_ = new QPushButton(editor_);
     out_neuron_->resize(100, 100);
     out_neuron_->move(10, 230);
     out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
                                "border-radius: 50px; }");
-    connect(out_neuron_, SIGNAL(released()), this, SLOT(createOutNeuron()));
+    connect(out_neuron_, SIGNAL(released()), this, SLOT(drawOutNeuron()));
+
+    delete_neuron_btn_ = new QPushButton(editor_);
+    delete_neuron_btn_->resize(100, 40);
+    delete_neuron_btn_->move(10, 340);
+    delete_neuron_btn_->setStyleSheet("QPushButton {background: #505050;"
+                                      "}");
+    delete_neuron_btn_->setText("УДАЛИТЬ");
+    connect(delete_neuron_btn_, SIGNAL(released()), this, SLOT(deleteNeuron()));
+
+    add_edge_btn_ = new QPushButton(editor_);
+    add_edge_btn_->resize(100, 40);
+    add_edge_btn_->move(10, 450);
+    add_edge_btn_->setStyleSheet("QPushButton {background: #505050;"
+                                      "}");
+    add_edge_btn_->setText("СОЗДАТЬ РЕБРО");
+    connect(add_edge_btn_, SIGNAL(released()), this, SLOT((graphWidgetClicked)));
 
     edit_tablet_ = new GraphWidget(editor_);
     edit_tablet_->resize(650, 570);
@@ -184,119 +201,65 @@ void App::gotoSimulator()
     simulation_->show();
 }
 
-void App::createInNeuron()
-{
-    creating_tablet_ = new QWidget();
-    creating_tablet_->resize(170, 70);
-    creating_tablet_->setStyleSheet("QWidget {"
-                                    "background: 000000; }");
-    x_coord_ = new QLineEdit(creating_tablet_);
-    y_coord_ = new QLineEdit(creating_tablet_);
-    x_coord_->resize(90, 22);
-    x_coord_->move(5, 10);
-    x_coord_->setPlaceholderText("введите x");
-    y_coord_->resize(90, 22);
-    y_coord_->move(5, 40);
-    y_coord_->setPlaceholderText("введите y");
-
-    neuron_painter_ = new QPushButton(creating_tablet_);
-    neuron_painter_->resize(65, 30);
-    neuron_painter_->move(100, 35);
-    neuron_painter_->setText("СОЗДАТЬ");
-    neuron_painter_->setStyleSheet("QPushButton { color: #ffffff;"
-                                   "background: #404040;"
-                                   "border-radius: 5px; }");
-    connect(neuron_painter_, SIGNAL(released()), this, SLOT(drawInNeuron()));
-
-    creating_tablet_->show();
-}
-
-void App::createFCNNeuron()
-{
-    creating_tablet_ = new QWidget();
-    creating_tablet_->resize(170, 70);
-    creating_tablet_->setStyleSheet("QWidget {"
-                                    "background: 000000; }");
-    x_coord_ = new QLineEdit(creating_tablet_);
-    y_coord_ = new QLineEdit(creating_tablet_);
-    x_coord_->resize(90, 22);
-    x_coord_->move(5, 10);
-    x_coord_->setPlaceholderText("введите x");
-    y_coord_->resize(90, 22);
-    y_coord_->move(5, 40);
-    y_coord_->setPlaceholderText("введите y");
-
-    neuron_painter_ = new QPushButton(creating_tablet_);
-    neuron_painter_->resize(65, 30);
-    neuron_painter_->move(100, 35);
-    neuron_painter_->setText("СОЗДАТЬ");
-    neuron_painter_->setStyleSheet("QPushButton { color: #ffffff;"
-                                   "background: #404040;"
-                                   "border-radius: 5px; }");
-    connect(neuron_painter_, SIGNAL(released()), this, SLOT(drawFCNNeuron()));
-
-    creating_tablet_->show();
-}
-
-void App::createOutNeuron()
-{
-    creating_tablet_ = new QWidget();
-    creating_tablet_->resize(170, 70);
-    creating_tablet_->setStyleSheet("QWidget {"
-                                    "background: 000000; }");
-    x_coord_ = new QLineEdit(creating_tablet_);
-    y_coord_ = new QLineEdit(creating_tablet_);
-    x_coord_->resize(90, 22);
-    x_coord_->move(5, 10);
-    x_coord_->setPlaceholderText("введите x");
-    y_coord_->resize(90, 22);
-    y_coord_->move(5, 40);
-    y_coord_->setPlaceholderText("введите y");
-
-    neuron_painter_ = new QPushButton(creating_tablet_);
-    neuron_painter_->resize(65, 30);
-    neuron_painter_->move(100, 35);
-    neuron_painter_->setText("СОЗДАТЬ");
-    neuron_painter_->setStyleSheet("QPushButton { color: #ffffff;"
-                                   "background: #404040;"
-                                   "border-radius: 5px; }");
-    connect(neuron_painter_, SIGNAL(released()), this, SLOT(drawOutNeuron()));
-
-    creating_tablet_->show();
-}
-
 void App::drawInNeuron()
 {
-    int x = x_coord_->text().toInt() * 25;
-    int y = y_coord_->text().toInt() * 25;
-    delete x_coord_;
-    delete y_coord_;
-    delete neuron_painter_;
-    delete creating_tablet_;
     nodes_.push_back(new Node(0));
     edit_scene_->addItem(nodes_.back());
 }
 
 void App::drawFCNNeuron()
 {
-    int x = x_coord_->text().toInt() * 25;
-    int y = y_coord_->text().toInt() * 25;
-    delete x_coord_;
-    delete y_coord_;
-    delete neuron_painter_;
-    delete creating_tablet_;
     nodes_.push_back(new Node(1));
     edit_scene_->addItem(nodes_.back());
 }
 
 void App::drawOutNeuron()
 {
-    int x = x_coord_->text().toInt() * 25;
-    int y = y_coord_->text().toInt() * 25;
-    delete x_coord_;
-    delete y_coord_;
-    delete neuron_painter_;
-    delete creating_tablet_;
     nodes_.push_back(new Node(2));
     edit_scene_->addItem(nodes_.back());
+}
+
+void App::deleteNeuron() {
+    if (!edit_scene_->selectedItems().empty())
+        delete edit_scene_->selectedItems().takeFirst();
+}
+
+void App::graphWidgetClicked(QMouseEvent *event)
+{
+    auto selectedItems = edit_scene_->selectedItems();
+    if (selectedItems.size() == 0) {
+        // Если выделенных элементов нет.
+        delete_neuron_btn_->setEnabled(false);
+        return;
+    } else if (edit_tablet_->itemAt(event->pos())) {
+        // Если нажатие произошло над элементом сцены.
+        delete_neuron_btn_->setEnabled(true);
+        Node *node = dynamic_cast<Node *>(selectedItems.at(0));
+        if (node) { // Если выделена вершина.
+            if (connProcess == CONN::NEED_SOURCE) {
+                // Отмечаем источник.
+                node->setMark(true);
+                connProcess = CONN::NEED_DEST;
+            } else if (connProcess == CONN::NEED_DEST) {
+                // Находим вершину назначения.
+                Node * nSourse = nullptr;
+                        foreach (auto it, edit_scene_->items()) {
+                        Node *nTemp = dynamic_cast<Node *>(it);
+                        if (nTemp && nTemp->mark()) {
+                            nSourse = nTemp;
+                            break;
+                        }
+                    }
+                if (nSourse) {
+                    // Если нашлась выделенная вершина.
+                    Edge *e = new Edge(nSourse, node);
+                    edit_scene_->addItem(e);
+                    nSourse->setMark(false);
+                    connProcess = CONN::NONE;
+                } else {
+                    qDebug() << "Error connProcess value";
+                }
+            }
+        }
+    }
 }

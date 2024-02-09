@@ -20,15 +20,14 @@ private slots:
     void gotoEditor();
     void gotoSimulator();
 
-    void createInNeuron();
-    void createFCNNeuron();
-    void createOutNeuron();
-
     void drawInNeuron();
     void drawFCNNeuron();
     void drawOutNeuron();
+    void deleteNeuron();
+    void graphWidgetClicked(QMouseEvent *event);
 
 private:
+    int connProcess;
     std::vector<Node*> nodes_;
     QWidget* window_;
     QLabel* base_line_;
@@ -45,6 +44,9 @@ private:
     QPushButton* in_neuron_;
     QPushButton* fcn_neuron_;
     QPushButton* out_neuron_;
+    QPushButton* delete_neuron_btn_;
+    QPushButton* add_edge_btn_;
+
     QGraphicsView* edit_tablet_;
     QGraphicsScene* edit_scene_;
     QPainter* painter_;
