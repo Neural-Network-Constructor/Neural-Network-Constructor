@@ -1,7 +1,4 @@
 #pragma once
-#pragma GCC optimize("Ofast,unroll-loops,mfma,mavx,mavx2")
-#pragma GCC target("avx,avx2,fma")
-#pragma GCC optimize("03")
 
 #include <fstream>
 #include <iostream>
@@ -27,7 +24,9 @@
 #include <QColor>
 #include <QGraphicsItem>
 
-
-enum class Neurons {
-    In, FNN, Out
+enum class Neurons
+{
+    In,
+    FNN,
+    Out
 };
