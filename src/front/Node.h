@@ -38,6 +38,7 @@ private:
     QList<Edge *> edgeList; // массив ребёр, связанных с ним
     bool _mark; // метка выделенности
     Neurons _type; // тип нейрона
+    ActivationFunc _func = ActivationFunc::ReLu;
 };
 
 

@@ -208,7 +208,7 @@ App::App(int width, int height)
     start_simulating_btn_->setStyleSheet("QPushButton {"
                                 "background: #505050; }");
     start_simulating_btn_->setText("ЗАПУСК");
-    connect(start_simulating_btn_, SIGNAL(released()), this, SLOT(gotoSimulator()));
+    connect(start_simulating_btn_, SIGNAL(released()), this, SLOT(start_simulating()));
 
     // РАБОТА СО СТРАНИЦЕЙ СИМУЛЯЦИИ
 
@@ -420,4 +420,29 @@ void App::loadCSVFromFile()
 
 void App::closeSettings() {
     settings_window_->hide();
+}
+
+void App::start_simulating() {
+    std::cout << "In ";
+    dfs(root_);
+    used_.clear();
+
+}
+
+void App::dfs(Node* u) {
+    used_[u] = 1;
+    if (!graph_[u].second)
+        return;
+    for (auto e : graph_[u].first) {
+        if (!used_[e]) {
+            if (e->getType() == Neurons::In) {
+                std::cout << "In ";
+            } else if (e->getType() == Neurons::FCL) {
+                std::cout << "FCL ";
+            } else {
+                std::cout << "Out ";
+            }
+            dfs(e);
+        }
+    }
 }

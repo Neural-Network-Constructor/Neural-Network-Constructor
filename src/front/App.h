@@ -29,9 +29,12 @@ private slots:
     void chooseSettings();
     void loadCSVFromFile();
     void closeSettings();
+    void start_simulating();
+    void dfs(Node* u);
 
 private:
     std::map <Node*, std::pair<std::vector<Node*>, bool> > graph_;
+    std::map <Node*, int> used_;
     Node* node, *root_, *leaf_;
     bool is_exist_edge_to_leaf_ = false;
     int connProcess;

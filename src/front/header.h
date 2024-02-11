@@ -32,3 +32,10 @@ enum class Neurons
     FCL,
     Out
 };
+
+enum class ActivationFunc
+{
+    ReLu,
+    Sigmoid,
+    Hiptan
+};
