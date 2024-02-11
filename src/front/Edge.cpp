@@ -1,11 +1,12 @@
 #include "Edge.h"
 #include "Node.h"
+#include "App.h"
 
 #include <cmath>
 #include <QPainter>
 
 Edge::Edge(Node *sourceNode, Node *destNode)
-        : arrowSize(10)
+        : arrowSize(8)
 {
     setAcceptedMouseButtons(Qt::NoButton);
     source = sourceNode;
@@ -33,7 +34,9 @@ Node *Edge::destNode() const
 
 void Edge::adjust()
 {
-    if (!source || !dest)
+    if (!source || !dest ||
+        source->getType() ==  Neurons::Out ||
+        dest->getType() == Neurons::In)
         return;
 
     QLineF line(mapFromItem(source, 0, 0), mapFromItem(dest, 0, 0));
@@ -52,7 +55,9 @@ void Edge::adjust()
 
 QRectF Edge::boundingRect() const
 {
-    if (!source || !dest)
+    if (!source || !dest ||
+        source->getType() ==  Neurons::Out ||
+        dest->getType() == Neurons::In)
         return QRectF();
 
     qreal penWidth = 1;
@@ -66,9 +71,10 @@ QRectF Edge::boundingRect() const
 
 void Edge::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    if (!source || !dest)
+    if (!source || !dest ||
+        source->getType() ==  Neurons::Out ||
+        dest->getType() == Neurons::In)
         return;
-
     QLineF line(sourcePoint, destPoint);
     if (qFuzzyCompare(line.length(), qreal(0.)))
         return;
@@ -86,7 +92,6 @@ void Edge::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
                                               cos(angle - M_PI / 3) * arrowSize);
     QPointF destArrowP2 = destPoint + QPointF(sin(angle - M_PI + M_PI / 3) * arrowSize,
                                               cos(angle - M_PI + M_PI / 3) * arrowSize);
-
     painter->setBrush(Qt::white);
 //    painter->drawPolygon(QPolygonF() << line.p1() << sourceArrowP1 << sourceArrowP2);
     painter->drawPolygon(QPolygonF() << line.p2() << destArrowP1 << destArrowP2);

@@ -31,7 +31,9 @@ private slots:
     void closeSettings();
 
 private:
-    Node* node;
+    std::map <Node*, std::pair<std::vector<Node*>, bool> > graph_;
+    Node* node, *root_, *leaf_;
+    bool is_exist_edge_to_leaf_ = false;
     int connProcess;
     std::vector<Node*> nodes_;
     QFont base_font_;

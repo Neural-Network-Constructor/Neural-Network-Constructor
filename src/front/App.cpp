@@ -297,6 +297,7 @@ void App::drawInNeuron()
     in_neuron_->setEnabled(false);
     nodes_.push_back(new Node(Neurons::In));
     edit_scene_->addItem(nodes_.back());
+    root_ = nodes_.back();
 }
 
 void App::drawFCLNeuron()
@@ -313,6 +314,7 @@ void App::drawOutNeuron()
     out_neuron_->setEnabled(false);
     nodes_.push_back(new Node(Neurons::Out));
     edit_scene_->addItem(nodes_.back());
+    leaf_ = nodes_.back();
 }
 
 void App::deleteNeuron() {
@@ -329,6 +331,8 @@ void App::deleteNeuron() {
                                        "color: #ffffff;}");
             out_neuron_->setEnabled(true);
         }
+        graph_[node].first.clear();
+        graph_[node].second = false;
         delete edit_scene_->selectedItems().takeFirst();
         delete_neuron_btn_->setEnabled(false);
     }
@@ -363,8 +367,17 @@ void App::graphWidgetClicked(QMouseEvent *event)
                     }
                 if (nSourse) {
                     // Если нашлась выделенная вершина.
-                    Edge *e = new Edge(nSourse, node);
-                    edit_scene_->addItem(e);
+                    if (nSourse->getType() ==  Neurons::Out ||
+                        node->getType() == Neurons::In ||
+                        (node->getType() == Neurons::Out && is_exist_edge_to_leaf_)) {
+
+                    } else {
+                        Edge *e = new Edge(nSourse, node);
+                        edit_scene_->addItem(e);
+                        graph_[nSourse].first.push_back(node);
+                        graph_[nSourse].second = true;
+                        is_exist_edge_to_leaf_ = is_exist_edge_to_leaf_ || (node == leaf_);
+                    }
                     nSourse->setMark(false);
                     connProcess = CONN::NONE;
                 } else {
@@ -377,7 +390,6 @@ void App::graphWidgetClicked(QMouseEvent *event)
 
 void App::connectNodes()
 {
-    Node *node;
     if(edit_scene_->selectedItems().size() == 0) {
         connProcess = CONN::NEED_SOURCE;
     } else if (edit_scene_->selectedItems().size() == 1
