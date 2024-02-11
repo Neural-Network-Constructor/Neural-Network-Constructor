@@ -30,7 +30,6 @@ add_executable(NNC
     src/front/graphwidget.cpp
     src/front/Edge.cpp
     src/front/widget.cpp
-    src/front/widget.ui
 
 )
 target_link_libraries(NNC

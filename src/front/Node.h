@@ -11,12 +11,13 @@ class Node : public QGraphicsItem
     friend Edge::Edge(Node *sourceNode, Node *destNode);
     friend Edge::~Edge();
 public:
-    Node(int type); // конструктор
+    Node(Neurons type); // конструктор
     ~Node() override; // деструктор
     QList<Edge *> edges() const; // массив рёбер
 
     enum { Type = UserType + 1 };
     int type() const override { return Type; }
+    const Neurons getType() const {return _type; }
     static const int RADIUS = 30; // базовый радиус
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
@@ -36,7 +37,7 @@ protected:
 private:
     QList<Edge *> edgeList; // массив ребёр, связанных с ним
     bool _mark; // метка выделенности
-    int _type; // тип нейрона
+    Neurons _type; // тип нейрона
 };
 
 

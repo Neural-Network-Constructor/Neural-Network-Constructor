@@ -19,7 +19,7 @@ Widget::~Widget()
 
 void Widget::on_btnCreateNode_clicked()
 {
-    Node *node = new Node(0);
+    Node *node = new Node(Neurons::In);
     ui->graphicsView->scene()->addItem(node);
 }
 

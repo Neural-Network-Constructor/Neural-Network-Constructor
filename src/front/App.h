@@ -15,22 +15,29 @@ public:
     }
 
 private slots:
-    void loadFromFile(); // загрузка из файла
+    void loadNNCFromFile(); // загрузка из файла
     void gotoBegin(); // возвращение к стартовому экрану
     void gotoEditor(); // возвращение к редактору
     void gotoSimulator(); // возвращение к симуляции
 
     void drawInNeuron(); // рисование входного нейрона
-    void drawFCNNeuron(); // рисование основного нейрона
+    void drawFCLNeuron(); // рисование основного нейрона
     void drawOutNeuron(); // рисование выходного нейрона
     void deleteNeuron(); // удаление нейрона
     void graphWidgetClicked(QMouseEvent *event); // создание ребра
+    void connectNodes();
+    void chooseSettings();
+    void loadCSVFromFile();
+    void closeSettings();
 
 private:
+    Node* node;
     int connProcess;
     std::vector<Node*> nodes_;
+    QFont base_font_;
     QWidget* window_;
     QLabel* base_line_;
+    QFont logo_font_;
     QPushButton* begin_button_;
     QPushButton* editor_button_;
     QPushButton* simulation_button_;
@@ -39,16 +46,26 @@ private:
     QLabel* begin_;
     QPushButton* load_button_;
     QPushButton* create_button_;
+    QLabel* name_text_;
+    QFont neuro_font_;
 
     QLabel* editor_;
     QPushButton* in_neuron_;
-    QPushButton* fcn_neuron_;
+    QPushButton* FCL_neuron_;
     QPushButton* out_neuron_;
     QPushButton* delete_neuron_btn_;
     QPushButton* add_edge_btn_;
+    QPushButton* settings_btn_;
+    QWidget* settings_window_;
+    QLineEdit* epoch_count_tablet_;
+    QLabel* csv_file_text_;
+    QPushButton* csv_file_btn_;
+    QPushButton* save_settings_btn_;
+    QPushButton* go_from_settings_btn_;
+
     QPushButton* start_simulating_btn_;
 
-    QGraphicsView* edit_tablet_;
+    GraphWidget* edit_tablet_;
     QGraphicsScene* edit_scene_;
     QPainter* painter_;
 

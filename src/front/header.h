@@ -24,10 +24,11 @@
 #include <QColor>
 #include <QMouseEvent>
 #include <QGraphicsItem>
+#include <QFont>
 
 enum class Neurons
 {
     In,
-    FCN,
+    FCL,
     Out
 };
