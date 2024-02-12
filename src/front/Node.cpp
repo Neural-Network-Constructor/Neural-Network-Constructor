@@ -73,9 +73,14 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     else if (this->_type == Neurons::Out) {
         painter->setBrush((option->state & QStyle::State_Selected ? QColor(247,182,182) : QColor(233, 63, 63)));
     }
+    if (is_in_dfs_) {
+        painter->setBrush(QColor(244, 32, 249));
+    }
     painter->setPen(QPen(_mark ? Qt::white : Qt::black, 2));
     painter->drawEllipse(-RADIUS, -RADIUS, 2 * RADIUS, 2 * RADIUS);
 }
+
+
 
 QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)
 {
@@ -101,4 +106,9 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     update();
     QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void Node::setIsInDfs(bool check) {
+    is_in_dfs_ = check;
+    update();
 }

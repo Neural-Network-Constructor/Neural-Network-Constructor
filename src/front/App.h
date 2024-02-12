@@ -19,6 +19,7 @@ private slots:
     void gotoBegin(); // возвращение к стартовому экрану
     void gotoEditor(); // возвращение к редактору
     void gotoSimulator(); // возвращение к симуляции
+    void getUpdate();
 
     void drawInNeuron(); // рисование входного нейрона
     void drawFCLNeuron(); // рисование основного нейрона
@@ -29,8 +30,14 @@ private slots:
     void chooseSettings();
     void loadCSVFromFile();
     void closeSettings();
+    void saveSettings();
     void start_simulating();
     void dfs(Node* u);
+    void minusEpochCounter();
+    void plusEpochCounter();
+    void changeCounterTablet();
+    void changeEpochCounter(int n);
+    void saveEpoSettings();
 
 private:
     std::map <Node*, std::pair<std::vector<Node*>, bool> > graph_;
@@ -38,11 +45,13 @@ private:
     Node* node, *root_, *leaf_, *last_;
     bool is_exist_edge_to_leaf_ = false;
     int connProcess;
+    int epochs_ = -1, cur_epochs = 1;
     std::vector<Node*> nodes_;
     QFont base_font_;
     QWidget* window_;
     QLabel* base_line_;
     QFont logo_font_;
+    QFont sim_font_;
     QPushButton* begin_button_;
     QPushButton* editor_button_;
     QPushButton* simulation_button_;
@@ -81,7 +90,13 @@ private:
 
 
     QLabel* simulation_;
-    QLabel* pokapohui2_;
+    QLabel* epoch_count_;
+    QPushButton* epochs_counter_back_;
+    QPushButton* choose_epoch_counter_;
+    QPushButton* epochs_counter_up_;
+    QMainWindow* epochs_counter_settings_;
+    QLineEdit* epochs_counter_tablet_;
+    QPushButton* save_epo_settings_btn_;
 
 
     QTabBar* tabbar_;

@@ -192,15 +192,13 @@ App::App(int width, int height)
     save_settings_btn_->resize(95, 30);
     save_settings_btn_->move(115, 80);
     save_settings_btn_->setText("СОХРАНИТЬ");
-    connect(save_settings_btn_, SIGNAL(released()), this, SLOT(closeSettings()));
+    connect(save_settings_btn_, SIGNAL(released()), this, SLOT(saveSettings()));
 
     go_from_settings_btn_ = new QPushButton(settings_window_);
     go_from_settings_btn_->resize(95, 30);
     go_from_settings_btn_->move(10, 80);
     go_from_settings_btn_->setText("ОТМЕНИТЬ");
     connect(go_from_settings_btn_, SIGNAL(released()), this, SLOT(closeSettings()));
-
-
 
     start_simulating_btn_ = new QPushButton(editor_);
     start_simulating_btn_->resize(110, 40);
@@ -217,7 +215,55 @@ App::App(int width, int height)
     simulation_->resize(120, 570);
     simulation_->setStyleSheet("QLabel {"
                                "background: #404040 }");
+    simulation_->setFont(neuro_font_);
 
+    epoch_count_ = new QLabel(simulation_);
+    sim_font_ = QFont("Rockwell", 25);
+    epoch_count_->setFont(sim_font_);
+    epoch_count_->resize(120, 80);
+    epoch_count_->move(1, 10);
+
+    epochs_counter_back_ = new QPushButton(simulation_);
+    epochs_counter_back_->setText("<");
+    epochs_counter_back_->resize(30, 30);
+    epochs_counter_back_->move(1, 100);
+    epochs_counter_back_->setStyleSheet("QPushButton { color: #ffffff;"
+                                      "background: #505050;"
+                                      "border-radius: 5px; }");
+    connect(epochs_counter_back_, SIGNAL(released()), this, SLOT(minusEpochCounter()));
+
+    choose_epoch_counter_ = new QPushButton(simulation_);
+    choose_epoch_counter_->setText("эпоха");
+    choose_epoch_counter_->resize(50, 30);
+    choose_epoch_counter_->move(35, 100);
+    choose_epoch_counter_->setStyleSheet("QPushButton { color: #ffffff;"
+                                        "background: #505050;"
+                                        "border-radius: 5px; }");
+    connect(choose_epoch_counter_, SIGNAL(released()), this, SLOT(changeCounterTablet()));
+
+    epochs_counter_up_ = new QPushButton(simulation_);
+    epochs_counter_up_->setText(">");
+    epochs_counter_up_->resize(30, 30);
+    epochs_counter_up_->move(89, 100);
+    epochs_counter_up_->setStyleSheet("QPushButton { color: #ffffff;"
+                                         "background: #505050;"
+                                         "border-radius: 5px; }");
+    connect(epochs_counter_up_, SIGNAL(released()), this, SLOT(plusEpochCounter()));
+
+
+    epochs_counter_settings_ = new QMainWindow();
+    epochs_counter_settings_->resize(150, 60);
+
+    epochs_counter_tablet_ = new QLineEdit(epochs_counter_settings_);
+    epochs_counter_tablet_->resize(130, 20);
+    epochs_counter_tablet_->move(10, 5);
+    epochs_counter_tablet_->setPlaceholderText("Количество эпох");
+
+    save_epo_settings_btn_ = new QPushButton(epochs_counter_settings_);
+    save_epo_settings_btn_->resize(100, 25);
+    save_epo_settings_btn_->move(25, 30);
+    save_epo_settings_btn_->setText("СОХРАНИТЬ");
+    connect(save_epo_settings_btn_, SIGNAL(released()), this, SLOT(saveEpoSettings()));
 
     gotoBegin();
 }
@@ -225,6 +271,17 @@ App::App(int width, int height)
 App::~App()
 {
     delete window_;
+}
+
+void App::getUpdate() {
+    window_->update();
+    edit_scene_->update();
+    edit_tablet_->update();
+    editor_->update();
+    editor_button_->update();
+    for (auto e : nodes_) {
+        e->update();
+    }
 }
 
 void App::loadNNCFromFile()
@@ -240,7 +297,6 @@ void App::loadNNCFromFile()
 }
 
 void App::gotoBegin()
-
 {
     begin_button_->setStyleSheet("QPushButton { color: #ffffff;"
                                  "background: #202020;"
@@ -426,16 +482,24 @@ void App::closeSettings() {
     settings_window_->hide();
 }
 
+void App::saveSettings() {
+    epochs_ = epoch_count_tablet_->text().toInt();
+    //магия с *.csv файл
+    settings_window_->hide();
+}
+
 void App::start_simulating() {
-    if (is_exist_edge_to_leaf_) {
-        dfs(root_);
-        used_.clear();
+    if (!out_neuron_->isEnabled() && !in_neuron_->isEnabled() && epochs_ != -1) {
+        std::string string_epochs_ = "эпоха\n1/\n"+std::to_string(epochs_);
+        epoch_count_->setText(QString::fromStdString(string_epochs_));
+        gotoSimulator();
     }
 }
 
 void App::dfs(Node* u) {
     if (graph_[u].second)
         return;
+    for (int i = 0; i < 1e9; ++i) {}
     used_[u] = 1;
     if (u->getType() == Neurons::In) {
         std::cout << "In ";
@@ -447,6 +511,37 @@ void App::dfs(Node* u) {
     for (auto e : graph_[u].first) {
         if (!used_[e]) {
             dfs(e);
+            for (int i = 0; i < 1e9; ++i) {}
         }
     }
+}
+void App::minusEpochCounter() {
+    changeEpochCounter(-1);
+}
+
+void App::changeCounterTablet() {
+    epochs_counter_settings_->show();
+}
+
+void App::plusEpochCounter() {
+    changeEpochCounter(1);
+}
+
+void App::changeEpochCounter(int n) {
+    cur_epochs = std::max(cur_epochs + n, 1);
+    if (cur_epochs > epochs_)
+        cur_epochs = epochs_;
+    std::string string_epochs_ = "эпоха\n" + std::to_string(cur_epochs) + "/\n"+std::to_string(epochs_);
+    epoch_count_->setText(QString::fromStdString(string_epochs_));
+    epoch_count_->update();
+    simulation_->update();
+}
+
+void App::saveEpoSettings() {
+    cur_epochs = epochs_counter_tablet_->text().toInt();
+    cur_epochs = std::max(cur_epochs, 1);
+    if (cur_epochs > epochs_)
+        cur_epochs = epochs_;
+    changeEpochCounter(0);
+    epochs_counter_settings_->hide();
 }

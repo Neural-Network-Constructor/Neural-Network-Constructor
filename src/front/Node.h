@@ -23,8 +23,9 @@ public:
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, // рисование вершины
                QWidget *widget) override;
-
+    void dfsPaint(QPainter *painter, QWidget *widget);
     bool mark() const; // проверка на выделенность
+    void setIsInDfs(bool check);
     void addEdge(Edge *edge); // добавление ребра
     void setMark(bool mark); // установка выделенности
 
@@ -37,6 +38,7 @@ protected:
 private:
     QList<Edge *> edgeList; // массив ребёр, связанных с ним
     bool _mark; // метка выделенности
+    bool is_in_dfs_ = false;
     Neurons _type; // тип нейрона
     ActivationFunc _func = ActivationFunc::ReLu;
 };
