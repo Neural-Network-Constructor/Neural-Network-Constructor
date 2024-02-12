@@ -331,12 +331,14 @@ void App::deleteNeuron() {
                                        "color: #ffffff;}");
             out_neuron_->setEnabled(true);
         }
+        if (node == last_) {
+            is_exist_edge_to_leaf_ = false;
+        }
         graph_[node].first.clear();
-        graph_[node].second = false;
+        graph_[node].second = true;
         delete edit_scene_->selectedItems().takeFirst();
         delete_neuron_btn_->setEnabled(false);
     }
-
 }
 
 void App::graphWidgetClicked(QMouseEvent *event)
@@ -375,7 +377,9 @@ void App::graphWidgetClicked(QMouseEvent *event)
                         Edge *e = new Edge(nSourse, node);
                         edit_scene_->addItem(e);
                         graph_[nSourse].first.push_back(node);
-                        graph_[nSourse].second = true;
+                        graph_[nSourse].second = false;
+                        if (node == leaf_ && !is_exist_edge_to_leaf_)
+                            last_ = nSourse;
                         is_exist_edge_to_leaf_ = is_exist_edge_to_leaf_ || (node == leaf_);
                     }
                     nSourse->setMark(false);
@@ -423,25 +427,25 @@ void App::closeSettings() {
 }
 
 void App::start_simulating() {
-    std::cout << "In ";
-    dfs(root_);
-    used_.clear();
-
+    if (is_exist_edge_to_leaf_) {
+        dfs(root_);
+        used_.clear();
+    }
 }
 
 void App::dfs(Node* u) {
-    used_[u] = 1;
-    if (!graph_[u].second)
+    if (graph_[u].second)
         return;
+    used_[u] = 1;
+    if (u->getType() == Neurons::In) {
+        std::cout << "In ";
+    } else if (u->getType() == Neurons::FCL) {
+        std::cout << "FCL ";
+    } else {
+        std::cout << "Out ";
+    }
     for (auto e : graph_[u].first) {
         if (!used_[e]) {
-            if (e->getType() == Neurons::In) {
-                std::cout << "In ";
-            } else if (e->getType() == Neurons::FCL) {
-                std::cout << "FCL ";
-            } else {
-                std::cout << "Out ";
-            }
             dfs(e);
         }
     }

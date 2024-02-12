@@ -21,7 +21,12 @@ GraphWidget::GraphWidget(QWidget *parent)
 void GraphWidget::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
-        case Qt::Key_Up:
+        case Qt::Key_D:
+            if (dragMode() == QGraphicsView::NoDrag) {
+                setDragMode(QGraphicsView::ScrollHandDrag);
+            } else {
+                setDragMode(QGraphicsView::NoDrag);
+            }
             break;
         case Qt::Key_Down:
             break;
