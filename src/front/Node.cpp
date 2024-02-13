@@ -14,7 +14,7 @@ Node::Node(Neurons type) : _type(type)
     setFlag(ItemIsMovable);
     setFlag(ItemSendsGeometryChanges);
     setCacheMode(DeviceCoordinateCache);
-    setZValue(0);
+    setZValue(1);
 }
 
 Node::~Node()
@@ -64,6 +64,20 @@ QPainterPath Node::shape() const
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
+    std::string text = "";
+    if (this->_type == Neurons::FCL) {
+        if (this->_func == ActivationFunc::ReLu) {
+            text = "ReLu";
+        } else if (this->_func == ActivationFunc::Sigmoid) {
+            text = "Sigmoid";
+        } else {
+            text = "Tanh";
+        }
+    } else if (this->_type == Neurons::In) {
+        text = "IN";
+    } else {
+        text = "OUT";
+    }
     if (this->_type == Neurons::In) {
         painter->setBrush((option->state & QStyle::State_Selected ? QColor(188,240,190) : QColor(96, 220, 101)));
     }
@@ -78,6 +92,7 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
     painter->setPen(QPen(_mark ? Qt::white : Qt::black, 2));
     painter->drawEllipse(-RADIUS, -RADIUS, 2 * RADIUS, 2 * RADIUS);
+    painter->drawText(-22, 4, QString::fromStdString(text));
 }
 
 

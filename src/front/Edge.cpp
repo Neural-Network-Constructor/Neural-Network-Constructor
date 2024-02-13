@@ -8,6 +8,7 @@
 Edge::Edge(Node *sourceNode, Node *destNode)
         : arrowSize(8)
 {
+    setZValue(2);
     setAcceptedMouseButtons(Qt::NoButton);
     source = sourceNode;
     dest = destNode;

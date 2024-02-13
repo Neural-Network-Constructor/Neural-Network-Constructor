@@ -40,6 +40,7 @@ private slots:
     void saveEpoSettings();
     void setupReLuFunc();
     void setupSigmoidFunc();
+    void clearEditScene();
     void setupHiptanFunc();
 
 private:

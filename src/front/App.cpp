@@ -65,7 +65,7 @@ App::App(int width, int height)
                                   "border-radius: 5px; }");
     create_button_->setFont(QFont("Rockwell", 25));
     create_button_->setText("СОЗДАТЬ");
-    connect(create_button_, SIGNAL(released()), this, SLOT(gotoEditor()));
+    connect(create_button_, SIGNAL(released()), this, SLOT(clearEditScene()));
 
     logtext_ = new QLabel(begin_);
     logtext_->resize(460, 460);
@@ -153,14 +153,6 @@ App::App(int width, int height)
     edit_scene_ = new QGraphicsScene();
     edit_scene_->setBackgroundBrush(QColor(64, 64, 64));
     edit_tablet_->setScene(edit_scene_);
-    for (int i = -10000; i <= 10000; i += 25)
-    {
-        edit_scene_->addLine(i, -10000, i, 10000);
-    }
-    for (int i = -10000; i <= 10000; i += 25)
-    {
-        edit_scene_->addLine(-10000, i, 10000, i);
-    }
 
     func_text = new QLabel(editor_);
     func_text->resize(110, 40);
@@ -193,7 +185,7 @@ App::App(int width, int height)
     hiptan_func_btn_->setStyleSheet("QPushButton {"
                                      "background: #505050; }");
     hiptan_func_btn_->setFont(QFont("Rockwell", 15));
-    hiptan_func_btn_->setText("Hiptan");
+    hiptan_func_btn_->setText("Tanh");
     connect(hiptan_func_btn_, SIGNAL(released()), this, SLOT(setupHiptanFunc()));
 
     settings_btn_ = new QPushButton(editor_);
@@ -355,8 +347,18 @@ void App::gotoBegin()
 
 void App::gotoEditor()
 {
-    for (auto e : nodes_) {
-        e->setFlag(QGraphicsItem::ItemIsMovable, true);
+    for (int i = -10000; i <= 10000; i += 25)
+    {
+        edit_scene_->addLine(i, -10000, i, 10000);
+    }
+    for (int i = -10000; i <= 10000; i += 25)
+    {
+        edit_scene_->addLine(-10000, i, 10000, i);
+    }
+    if (!nodes_.empty()) {
+        for (auto e : nodes_) {
+            e->setFlag(QGraphicsItem::ItemIsMovable, true);
+        }
     }
     begin_button_->setStyleSheet("QPushButton { color: #ffffff;"
                                  "background: #404040;"
@@ -370,6 +372,7 @@ void App::gotoEditor()
     begin_->hide();
     editor_->show();
     simulation_->hide();
+    start_simulating_btn_->show();
 }
 
 void App::gotoSimulator()
@@ -387,6 +390,7 @@ void App::gotoSimulator()
         begin_->hide();
         editor_->show();
         simulation_->show();
+        start_simulating_btn_->hide();
     }
 }
 
@@ -437,6 +441,7 @@ void App::deleteNeuron() {
         }
         graph_[node].first.clear();
         graph_[node].second = true;
+        nodes_.erase(std::find(nodes_.begin(), nodes_.end(),node));
         delete edit_scene_->selectedItems().takeFirst();
         delete_neuron_btn_->setEnabled(false);
     }
@@ -526,7 +531,10 @@ void App::setupReLuFunc() {
         return;
     } else if (edit_scene_->selectedItems().size() == 1
                && (node = dynamic_cast<Node *> (edit_scene_->selectedItems().at(0)))) {
-        node->setFunc(ActivationFunc::ReLu);
+        if (node->getType() == Neurons::FCL) {
+            node->setFunc(ActivationFunc::ReLu);
+        }
+        node->update();
     }
 }
 
@@ -535,7 +543,10 @@ void App::setupSigmoidFunc() {
         return;
     } else if (edit_scene_->selectedItems().size() == 1
                && (node = dynamic_cast<Node *> (edit_scene_->selectedItems().at(0)))) {
-        node->setFunc(ActivationFunc::Sigmoid);
+        if (node->getType() == Neurons::FCL) {
+            node->setFunc(ActivationFunc::Sigmoid);
+        }
+        node->update();
     }
 }
 
@@ -544,7 +555,10 @@ void App::setupHiptanFunc() {
         return;
     } else if (edit_scene_->selectedItems().size() == 1
                && (node = dynamic_cast<Node *> (edit_scene_->selectedItems().at(0)))) {
-        node->setFunc(ActivationFunc::Hiptan);
+        if (node->getType() == Neurons::FCL) {
+            node->setFunc(ActivationFunc::Hiptan);
+        }
+        node->update();
     }
 }
 
@@ -577,9 +591,10 @@ void App::saveSettings() {
 }
 
 void App::start_simulating() {
-    if (!out_neuron_->isEnabled() && !in_neuron_->isEnabled() && epochs_ != -1) {
+    if (!out_neuron_->isEnabled() && !in_neuron_->isEnabled() && epochs_ > 0 && is_exist_edge_to_leaf_) {
         std::string string_epochs_ = "эпоха\n1/\n"+std::to_string(epochs_);
         epoch_count_->setText(QString::fromStdString(string_epochs_));
+        cur_epochs = 1;
         for (auto e : nodes_) {
             e->setMark(false);
             e->setFlag(QGraphicsItem::ItemIsMovable, false);
@@ -637,4 +652,24 @@ void App::saveEpoSettings() {
         cur_epochs = epochs_;
     changeEpochCounter(0);
     epochs_counter_settings_->hide();
+}
+
+void App::clearEditScene() {
+    edit_scene_->clear();
+    nodes_.clear();
+    graph_.clear();
+    is_exist_edge_to_leaf_ = false;
+    cur_epochs = 1;
+    epochs_ = -1;
+    in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
+                              "border-radius: 40px;"
+                              "color: #ffffff;}");
+    in_neuron_->setEnabled(true);
+
+    out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
+    "border-radius: 40px;"
+    "color: #ffffff;}");
+    out_neuron_->setEnabled(true);
+
+    gotoEditor();
 }
