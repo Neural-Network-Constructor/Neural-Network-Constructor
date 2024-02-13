@@ -3,6 +3,7 @@
 
 App::App(int width, int height)
 {
+    base_font_ = QFont("Rockwell", 20);
     window_ = new QMainWindow();
     window_->setFixedSize(width, height);
     window_->setStyleSheet("QMainWindow {"
@@ -22,6 +23,7 @@ App::App(int width, int height)
     begin_button_->setStyleSheet("QPushButton { color: #ffffff;"
                                  "background: #404040;"
                                  "border-radius: 5px; }");
+    begin_button_->setFont(base_font_);
     begin_button_->setText("НАЧАЛО");
     connect(begin_button_, SIGNAL(released()), this, SLOT(gotoBegin()));
 
@@ -31,6 +33,7 @@ App::App(int width, int height)
     editor_button_->setStyleSheet("QPushButton { color: #ffffff;"
                                   "background: #404040;"
                                   "border-radius: 5px; }");
+    editor_button_->setFont(base_font_);
     editor_button_->setText("РЕДАКТОР");
     connect(editor_button_, SIGNAL(released()), this, SLOT(gotoEditor()));
 
@@ -40,6 +43,7 @@ App::App(int width, int height)
     simulation_button_->setStyleSheet("QPushButton { color: #ffffff;"
                                   "background: #404040;"
                                   "border-radius: 5px; }");
+    simulation_button_->setFont(base_font_);
     simulation_button_->setText("СИМУЛЯЦИЯ");
     connect(simulation_button_, SIGNAL(released()), this, SLOT(gotoSimulator()));
 
@@ -54,23 +58,14 @@ App::App(int width, int height)
                           "background: #000000 }");
 
     create_button_ = new QPushButton(begin_);
-    create_button_->move(10, 30);
+    create_button_->move(30, 55);
     create_button_->resize(200, 60);
     create_button_->setStyleSheet("QPushButton { color: #ffffff;"
                                   "background: #404040;"
                                   "border-radius: 5px; }");
+    create_button_->setFont(QFont("Rockwell", 25));
     create_button_->setText("СОЗДАТЬ");
     connect(create_button_, SIGNAL(released()), this, SLOT(gotoEditor()));
-
-    load_button_ = new QPushButton(begin_);
-    load_button_->move(10, 110);
-    load_button_->resize(200, 60);
-    load_button_->setStyleSheet("QPushButton { color: #ffffff;"
-                                "background: #404040;"
-                                "border-radius: 5px; }");
-
-    load_button_->setText("ОТКРЫТЬ");
-    connect(load_button_, SIGNAL(released()), this, SLOT(loadNNCFromFile()));
 
     logtext_ = new QLabel(begin_);
     logtext_->resize(460, 460);
@@ -99,51 +94,52 @@ App::App(int width, int height)
                            "background: #404040 }");
 
     in_neuron_ = new QPushButton(editor_);
-    in_neuron_->resize(100, 100);
-    in_neuron_->move(10, 10);
+    in_neuron_->resize(80, 80);
+    in_neuron_->move(20, 10);
     in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
-                              "border-radius: 50px;"
+                              "border-radius: 40px;"
                               "color: #ffffff;}");
     in_neuron_->setText("IN");
     in_neuron_->setFont(neuro_font_);
     connect(in_neuron_, SIGNAL(released()), this, SLOT(drawInNeuron()));
 
     FCL_neuron_ = new QPushButton(editor_);
-    FCL_neuron_->resize(100, 100);
-    FCL_neuron_->move(10, 120);
+    FCL_neuron_->resize(80, 80);
+    FCL_neuron_->move(20, 100);
     FCL_neuron_->setStyleSheet("QPushButton {background: #4bdfda;"
-                               "border-radius: 50px;"
+                               "border-radius: 40px;"
                                "color: #ffffff }");
     FCL_neuron_->setFont(neuro_font_);
     FCL_neuron_->setText("FCL");
     connect(FCL_neuron_, SIGNAL(released()), this, SLOT(drawFCLNeuron()));
 
     out_neuron_ = new QPushButton(editor_);
-    out_neuron_->resize(100, 100);
-    out_neuron_->move(10, 230);
+    out_neuron_->resize(80, 80);
+    out_neuron_->move(20, 190);
     out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
-                               "border-radius: 50px; }");
+                               "border-radius: 40px; }");
     out_neuron_->setFont(neuro_font_);
     out_neuron_->setText("OUT");
     connect(out_neuron_, SIGNAL(released()), this, SLOT(drawOutNeuron()));
 
     delete_neuron_btn_ = new QPushButton(editor_);
     delete_neuron_btn_->resize(110, 40);
-    delete_neuron_btn_->move(5, 340);
+    delete_neuron_btn_->move(5, 280);
     delete_neuron_btn_->setStyleSheet("QPushButton {background: #505050;"
                                       "}");
+    delete_neuron_btn_->setFont(QFont("Rockwell", 15));
     delete_neuron_btn_->setText("УДАЛИТЬ");
     delete_neuron_btn_->setEnabled(false);
     connect(delete_neuron_btn_, SIGNAL(released()), this, SLOT(deleteNeuron()));
 
     add_edge_btn_ = new QPushButton(editor_);
     add_edge_btn_->resize(110, 40);
-    add_edge_btn_->move(5, 390);
+    add_edge_btn_->move(5, 330);
     add_edge_btn_->setStyleSheet("QPushButton {background: #505050;"
                                       "}");
+    add_edge_btn_->setFont(QFont("Rockwell", 12));
     add_edge_btn_->setText("СОЗДАТЬ РЕБРО");
     connect(add_edge_btn_, SIGNAL(released()), this, SLOT(connectNodes()));
-//    connect(edit_tablet_, &GraphWidget::mousePressedSignal, this, &App::graphWidgetClicked);
 
 
     edit_tablet_ = new GraphWidget(editor_);
@@ -166,11 +162,46 @@ App::App(int width, int height)
         edit_scene_->addLine(-10000, i, 10000, i);
     }
 
+    func_text = new QLabel(editor_);
+    func_text->resize(110, 40);
+    func_text->move(5, 370);
+    func_text->setFont(QFont("Rockwell", 15));
+    func_text->setText("ФУНКЦИИ");
+
+    relu_func_btn_ = new QPushButton(editor_);
+    relu_func_btn_->resize(90, 30);
+    relu_func_btn_->move(25, 410);
+    relu_func_btn_->setStyleSheet("QPushButton {"
+                                 "background: #505050; }");
+    relu_func_btn_->setFont(QFont("Rockwell", 15));
+    relu_func_btn_->setText("ReLu");
+    connect(relu_func_btn_, SIGNAL(released()), this, SLOT(setupReLuFunc()));
+
+
+    sigmoid_func_btn_ = new QPushButton(editor_);
+    sigmoid_func_btn_->resize(90, 30);
+    sigmoid_func_btn_->move(25, 445);
+    sigmoid_func_btn_->setStyleSheet("QPushButton {"
+                                  "background: #505050; }");
+    sigmoid_func_btn_->setFont(QFont("Rockwell", 15));
+    sigmoid_func_btn_->setText("Sigmoid");
+    connect(sigmoid_func_btn_, SIGNAL(released()), this, SLOT(setupSigmoidFunc()));
+
+    hiptan_func_btn_ = new QPushButton(editor_);
+    hiptan_func_btn_->resize(90, 30);
+    hiptan_func_btn_->move(25, 480);
+    hiptan_func_btn_->setStyleSheet("QPushButton {"
+                                     "background: #505050; }");
+    hiptan_func_btn_->setFont(QFont("Rockwell", 15));
+    hiptan_func_btn_->setText("Hiptan");
+    connect(hiptan_func_btn_, SIGNAL(released()), this, SLOT(setupHiptanFunc()));
+
     settings_btn_ = new QPushButton(editor_);
     settings_btn_->resize(110, 40);
-    settings_btn_->move(5, 440);
+    settings_btn_->move(5, 525);
     settings_btn_->setStyleSheet("QPushButton {"
                                          "background: #505050; }");
+    settings_btn_->setFont(QFont("Rockwell", 15));
     settings_btn_->setText("НАСТРОЙКИ");
     connect(settings_btn_, SIGNAL(released()), this, SLOT(chooseSettings()));//
 
@@ -191,20 +222,23 @@ App::App(int width, int height)
     save_settings_btn_ = new QPushButton(settings_window_);
     save_settings_btn_->resize(95, 30);
     save_settings_btn_->move(115, 80);
+    save_settings_btn_->setFont(QFont("Rockwell", 12));
     save_settings_btn_->setText("СОХРАНИТЬ");
     connect(save_settings_btn_, SIGNAL(released()), this, SLOT(saveSettings()));
 
     go_from_settings_btn_ = new QPushButton(settings_window_);
     go_from_settings_btn_->resize(95, 30);
     go_from_settings_btn_->move(10, 80);
+    go_from_settings_btn_->setFont(QFont("Rockwell", 12));
     go_from_settings_btn_->setText("ОТМЕНИТЬ");
     connect(go_from_settings_btn_, SIGNAL(released()), this, SLOT(closeSettings()));
 
     start_simulating_btn_ = new QPushButton(editor_);
-    start_simulating_btn_->resize(110, 40);
-    start_simulating_btn_->move(5, 490);
+    start_simulating_btn_->resize(200, 80);
+    start_simulating_btn_->move(560, 500);
     start_simulating_btn_->setStyleSheet("QPushButton {"
-                                "background: #505050; }");
+                                "background: #202020; }");
+    start_simulating_btn_->setFont(QFont("Rockwell", 25));
     start_simulating_btn_->setText("ЗАПУСК");
     connect(start_simulating_btn_, SIGNAL(released()), this, SLOT(start_simulating()));
 
@@ -222,17 +256,21 @@ App::App(int width, int height)
     epoch_count_->setFont(sim_font_);
     epoch_count_->resize(120, 80);
     epoch_count_->move(1, 10);
+    epoch_count_->setText("F");
 
     epochs_counter_back_ = new QPushButton(simulation_);
+    epochs_counter_back_->setFont(QFont("Rockwell", 12));
     epochs_counter_back_->setText("<");
     epochs_counter_back_->resize(30, 30);
     epochs_counter_back_->move(1, 100);
     epochs_counter_back_->setStyleSheet("QPushButton { color: #ffffff;"
                                       "background: #505050;"
                                       "border-radius: 5px; }");
+
     connect(epochs_counter_back_, SIGNAL(released()), this, SLOT(minusEpochCounter()));
 
     choose_epoch_counter_ = new QPushButton(simulation_);
+    choose_epoch_counter_->setFont(QFont("Rockwell", 12));
     choose_epoch_counter_->setText("эпоха");
     choose_epoch_counter_->resize(50, 30);
     choose_epoch_counter_->move(35, 100);
@@ -242,6 +280,7 @@ App::App(int width, int height)
     connect(choose_epoch_counter_, SIGNAL(released()), this, SLOT(changeCounterTablet()));
 
     epochs_counter_up_ = new QPushButton(simulation_);
+    epochs_counter_up_->setFont(QFont("Rockwell", 12));
     epochs_counter_up_->setText(">");
     epochs_counter_up_->resize(30, 30);
     epochs_counter_up_->move(89, 100);
@@ -260,8 +299,9 @@ App::App(int width, int height)
     epochs_counter_tablet_->setPlaceholderText("Количество эпох");
 
     save_epo_settings_btn_ = new QPushButton(epochs_counter_settings_);
-    save_epo_settings_btn_->resize(100, 25);
+    save_epo_settings_btn_->resize(100, 30);
     save_epo_settings_btn_->move(25, 30);
+    save_epo_settings_btn_->setFont(QFont("Rockwell", 12));
     save_epo_settings_btn_->setText("СОХРАНИТЬ");
     connect(save_epo_settings_btn_, SIGNAL(released()), this, SLOT(saveEpoSettings()));
 
@@ -315,6 +355,9 @@ void App::gotoBegin()
 
 void App::gotoEditor()
 {
+    for (auto e : nodes_) {
+        e->setFlag(QGraphicsItem::ItemIsMovable, true);
+    }
     begin_button_->setStyleSheet("QPushButton { color: #ffffff;"
                                  "background: #404040;"
                                  "border-radius: 5px; }");
@@ -331,24 +374,26 @@ void App::gotoEditor()
 
 void App::gotoSimulator()
 {
-    begin_button_->setStyleSheet("QPushButton { color: #ffffff;"
-                                 "background: #404040;"
-                                 "border-radius: 5px; }");
-    editor_button_->setStyleSheet("QPushButton { color: #ffffff;"
-                                  "background: #404040;"
-                                  "border-radius: 5px; }");
-    simulation_button_->setStyleSheet("QPushButton { color: #ffffff;"
-                                      "background: #202020;"
+    if (epochs_ != -1) {
+        begin_button_->setStyleSheet("QPushButton { color: #ffffff;"
+                                     "background: #404040;"
+                                     "border-radius: 5px; }");
+        editor_button_->setStyleSheet("QPushButton { color: #ffffff;"
+                                      "background: #404040;"
                                       "border-radius: 5px; }");
-    begin_->hide();
-    editor_->show();
-    simulation_->show();
+        simulation_button_->setStyleSheet("QPushButton { color: #ffffff;"
+                                          "background: #202020;"
+                                          "border-radius: 5px; }");
+        begin_->hide();
+        editor_->show();
+        simulation_->show();
+    }
 }
 
 void App::drawInNeuron()
 {
     in_neuron_->setStyleSheet("QPushButton {background: #606060;"
-                              "border-radius: 50px;"
+                              "border-radius: 40px;"
                               "color: #ffffff;}");
     in_neuron_->setEnabled(false);
     nodes_.push_back(new Node(Neurons::In));
@@ -365,7 +410,7 @@ void App::drawFCLNeuron()
 void App::drawOutNeuron()
 {
     out_neuron_->setStyleSheet("QPushButton {background: #606060;"
-                              "border-radius: 50px;"
+                              "border-radius: 40px;"
                               "color: #ffffff;}");
     out_neuron_->setEnabled(false);
     nodes_.push_back(new Node(Neurons::Out));
@@ -378,16 +423,16 @@ void App::deleteNeuron() {
         node = dynamic_cast<Node*>(edit_scene_->selectedItems().takeFirst());
         if (node->getType() == Neurons::In) {
             in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
-                                      "border-radius: 50px;"
+                                      "border-radius: 40px;"
                                       "color: #ffffff;}");
             in_neuron_->setEnabled(true);
         } else if (node->getType() == Neurons::Out) {
             out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
-                                       "border-radius: 50px;"
+                                       "border-radius: 40px;"
                                        "color: #ffffff;}");
             out_neuron_->setEnabled(true);
         }
-        if (node == last_) {
+        if (node == last_ || node == leaf_) {
             is_exist_edge_to_leaf_ = false;
         }
         graph_[node].first.clear();
@@ -400,48 +445,62 @@ void App::deleteNeuron() {
 void App::graphWidgetClicked(QMouseEvent *event)
 {
     auto selectedItems = edit_scene_->selectedItems();
-    if (selectedItems.size() == 0) {
-        // Если выделенных элементов нет.
-        delete_neuron_btn_->setEnabled(false);
-        return;
-    } else if (edit_tablet_->itemAt(event->pos())) {
-        // Если нажатие произошло над элементом сцены.
-        delete_neuron_btn_->setEnabled(true);
-        Node *node = dynamic_cast<Node *>(selectedItems.at(0));
-        if (node) { // Если выделена вершина.
-            if (connProcess == CONN::NEED_SOURCE) {
-                // Отмечаем источник.
-                node->setMark(true);
-                connProcess = CONN::NEED_DEST;
-            } else if (connProcess == CONN::NEED_DEST) {
-                // Находим вершину назначения.
-                Node * nSourse = nullptr;
-                        foreach (auto it, edit_scene_->items()) {
-                        Node *nTemp = dynamic_cast<Node *>(it);
-                        if (nTemp && nTemp->mark()) {
-                            nSourse = nTemp;
-                            break;
+    if (!simulation_->isHidden()) {
+        if (selectedItems.size() == 0) {
+            return;
+        } else if (edit_tablet_->itemAt(event->pos())) {
+            // Если нажатие произошло над элементом сцены.
+            Node *node = dynamic_cast<Node *>(selectedItems.at(0));
+            if (node) { // Если выделена вершина.
+                // работа с бэком и получение информации от него
+                auto it = node;
+            }
+        }
+    }
+    else {
+        if (selectedItems.size() == 0) {
+            // Если выделенных элементов нет.
+            delete_neuron_btn_->setEnabled(false);
+            return;
+        } else if (edit_tablet_->itemAt(event->pos())) {
+            // Если нажатие произошло над элементом сцены.
+            delete_neuron_btn_->setEnabled(true);
+            Node *node = dynamic_cast<Node *>(selectedItems.at(0));
+            if (node) { // Если выделена вершина.
+                if (connProcess == CONN::NEED_SOURCE) {
+                    // Отмечаем источник.
+                    node->setMark(true);
+                    connProcess = CONN::NEED_DEST;
+                } else if (connProcess == CONN::NEED_DEST) {
+                    // Находим вершину назначения.
+                    Node * nSourse = nullptr;
+                            foreach (auto it, edit_scene_->items()) {
+                            Node *nTemp = dynamic_cast<Node *>(it);
+                            if (nTemp && nTemp->mark()) {
+                                nSourse = nTemp;
+                                break;
+                            }
                         }
-                    }
-                if (nSourse) {
-                    // Если нашлась выделенная вершина.
-                    if (nSourse->getType() ==  Neurons::Out ||
-                        node->getType() == Neurons::In ||
-                        (node->getType() == Neurons::Out && is_exist_edge_to_leaf_)) {
+                    if (nSourse) {
+                        // Если нашлась выделенная вершина.
+                        if (nSourse->getType() ==  Neurons::Out ||
+                            node->getType() == Neurons::In ||
+                            (node->getType() == Neurons::Out && is_exist_edge_to_leaf_)) {
 
+                        } else {
+                            Edge *e = new Edge(nSourse, node);
+                            edit_scene_->addItem(e);
+                            graph_[nSourse].first.push_back(node);
+                            graph_[nSourse].second = false;
+                            if (node == leaf_ && !is_exist_edge_to_leaf_)
+                                last_ = nSourse;
+                            is_exist_edge_to_leaf_ = is_exist_edge_to_leaf_ || (node == leaf_);
+                        }
+                        nSourse->setMark(false);
+                        connProcess = CONN::NONE;
                     } else {
-                        Edge *e = new Edge(nSourse, node);
-                        edit_scene_->addItem(e);
-                        graph_[nSourse].first.push_back(node);
-                        graph_[nSourse].second = false;
-                        if (node == leaf_ && !is_exist_edge_to_leaf_)
-                            last_ = nSourse;
-                        is_exist_edge_to_leaf_ = is_exist_edge_to_leaf_ || (node == leaf_);
+                        qDebug() << "Error connProcess value";
                     }
-                    nSourse->setMark(false);
-                    connProcess = CONN::NONE;
-                } else {
-                    qDebug() << "Error connProcess value";
                 }
             }
         }
@@ -460,6 +519,33 @@ void App::connectNodes()
         connProcess = CONN::NEED_DEST;
     }
 
+}
+
+void App::setupReLuFunc() {
+    if(edit_scene_->selectedItems().size() == 0) {
+        return;
+    } else if (edit_scene_->selectedItems().size() == 1
+               && (node = dynamic_cast<Node *> (edit_scene_->selectedItems().at(0)))) {
+        node->setFunc(ActivationFunc::ReLu);
+    }
+}
+
+void App::setupSigmoidFunc() {
+    if(edit_scene_->selectedItems().size() == 0) {
+        return;
+    } else if (edit_scene_->selectedItems().size() == 1
+               && (node = dynamic_cast<Node *> (edit_scene_->selectedItems().at(0)))) {
+        node->setFunc(ActivationFunc::Sigmoid);
+    }
+}
+
+void App::setupHiptanFunc() {
+    if(edit_scene_->selectedItems().size() == 0) {
+        return;
+    } else if (edit_scene_->selectedItems().size() == 1
+               && (node = dynamic_cast<Node *> (edit_scene_->selectedItems().at(0)))) {
+        node->setFunc(ActivationFunc::Hiptan);
+    }
 }
 
 void App::chooseSettings() {
@@ -484,6 +570,8 @@ void App::closeSettings() {
 
 void App::saveSettings() {
     epochs_ = epoch_count_tablet_->text().toInt();
+    start_simulating_btn_->setStyleSheet("QPushButton {"
+                                         "background: #505050 }");
     //магия с *.csv файл
     settings_window_->hide();
 }
@@ -492,6 +580,11 @@ void App::start_simulating() {
     if (!out_neuron_->isEnabled() && !in_neuron_->isEnabled() && epochs_ != -1) {
         std::string string_epochs_ = "эпоха\n1/\n"+std::to_string(epochs_);
         epoch_count_->setText(QString::fromStdString(string_epochs_));
+        for (auto e : nodes_) {
+            e->setMark(false);
+            e->setFlag(QGraphicsItem::ItemIsMovable, false);
+            e->setSelected(false);
+        }
         gotoSimulator();
     }
 }

@@ -38,6 +38,9 @@ private slots:
     void changeCounterTablet();
     void changeEpochCounter(int n);
     void saveEpoSettings();
+    void setupReLuFunc();
+    void setupSigmoidFunc();
+    void setupHiptanFunc();
 
 private:
     std::map <Node*, std::pair<std::vector<Node*>, bool> > graph_;
@@ -69,6 +72,10 @@ private:
     QPushButton* out_neuron_;
     QPushButton* delete_neuron_btn_;
     QPushButton* add_edge_btn_;
+    QLabel* func_text;
+    QPushButton* relu_func_btn_;
+    QPushButton* sigmoid_func_btn_;
+    QPushButton* hiptan_func_btn_;
     QPushButton* settings_btn_;
     QWidget* settings_window_;
     QLineEdit* epoch_count_tablet_;

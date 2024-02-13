@@ -28,6 +28,8 @@ public:
     void setIsInDfs(bool check);
     void addEdge(Edge *edge); // добавление ребра
     void setMark(bool mark); // установка выделенности
+    void setSimulateMod();
+    void setFunc(ActivationFunc func);
 
 protected:
     QVariant itemChange(GraphicsItemChange change, // смена фокуса на вершине

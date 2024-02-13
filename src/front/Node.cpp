@@ -112,3 +112,11 @@ void Node::setIsInDfs(bool check) {
     is_in_dfs_ = check;
     update();
 }
+
+void Node::setSimulateMod() {
+
+}
+
+void Node::setFunc(ActivationFunc func) {
+    this->_func = func;
+}
