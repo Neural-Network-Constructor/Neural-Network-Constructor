@@ -613,7 +613,7 @@ void App::closeSettings() {
 
 void App::saveSettings() {
     epochs_ = epoch_count_tablet_->text().toInt();
-    learning_rate = learn_rate_count_tablet_->text().toInt();
+    learning_rate = learn_rate_count_tablet_->text().toDouble();
     start_simulating_btn_->setStyleSheet("QPushButton {"
                                          "background: #505050 }");
     //магия с *.csv файл
