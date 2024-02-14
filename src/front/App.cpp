@@ -204,8 +204,6 @@ App::App(int width, int height)
     epoch_count_tablet_->move(10, 10);
     epoch_count_tablet_->setPlaceholderText("Количество эпох");
 
-
-
     csv_file_btn_ = new QPushButton(settings_window_);
     csv_file_btn_->resize(200, 30);
     csv_file_btn_->move(10, 50);
