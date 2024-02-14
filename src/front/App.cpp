@@ -84,7 +84,7 @@ App::App(int width, int height)
 
 
     // РАБОТА СО СТРАНИЦЕЙ РЕДАКЦИИ
-    neuro_font_ = QFont("Rockwell", 30);
+    neuro_font_ = QFont("Rockwell", 20);
 
     editor_ = new QLabel(window_);
     editor_->move(225, 10);
@@ -93,33 +93,64 @@ App::App(int width, int height)
                            "background: #404040 }");
 
     in_neuron_ = new QPushButton(editor_);
-    in_neuron_->resize(80, 80);
-    in_neuron_->move(20, 10);
+    in_neuron_->resize(60, 60);
+    in_neuron_->move(30, 10);
     in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
-                              "border-radius: 40px;"
+                              "border-radius: 30px;"
                               "color: #ffffff;}");
     in_neuron_->setText("IN");
     in_neuron_->setFont(neuro_font_);
     connect(in_neuron_, SIGNAL(released()), this, SLOT(drawInNeuron()));
 
     FCL_neuron_ = new QPushButton(editor_);
-    FCL_neuron_->resize(80, 80);
-    FCL_neuron_->move(20, 100);
+    FCL_neuron_->resize(60, 60);
+    FCL_neuron_->move(30, 80);
     FCL_neuron_->setStyleSheet("QPushButton {background: #4bdfda;"
-                               "border-radius: 40px;"
+                               "border-radius: 30px;"
                                "color: #ffffff }");
     FCL_neuron_->setFont(neuro_font_);
     FCL_neuron_->setText("FCL");
     connect(FCL_neuron_, SIGNAL(released()), this, SLOT(drawFCLNeuron()));
 
     out_neuron_ = new QPushButton(editor_);
-    out_neuron_->resize(80, 80);
-    out_neuron_->move(20, 190);
+    out_neuron_->resize(60, 60);
+    out_neuron_->move(30, 150);
     out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
-                               "border-radius: 40px; }");
+                               "border-radius: 30px; }");
     out_neuron_->setFont(neuro_font_);
     out_neuron_->setText("OUT");
     connect(out_neuron_, SIGNAL(released()), this, SLOT(drawOutNeuron()));
+
+    set_neuron_count_btn_ = new QPushButton(editor_);
+    set_neuron_count_btn_->resize(110, 40);
+    set_neuron_count_btn_->move(5, 230);
+    set_neuron_count_btn_->setStyleSheet("QPushButton {background: #505050;"
+                                      "}");
+    set_neuron_count_btn_->setFont(QFont("Rockwell", 15));
+    set_neuron_count_btn_->setText("НЕЙРОНЫ");
+    connect(set_neuron_count_btn_, SIGNAL(released()), this, SLOT(setCount()));
+
+    neurons_counter_settings = new QMainWindow;
+    neurons_counter_settings->resize(200, 100);
+
+    neurons_counter_tablet_ = new QLineEdit(neurons_counter_settings);
+    neurons_counter_tablet_->resize(180, 30);
+    neurons_counter_tablet_->move(10, 10);
+    neurons_counter_tablet_->setPlaceholderText("Количество нейронов");
+
+    go_from_neurons_settings = new QPushButton(neurons_counter_settings);
+    go_from_neurons_settings->resize(85, 40);
+    go_from_neurons_settings->move(10, 50);
+    go_from_neurons_settings->setFont(QFont("Rockwell", 10));
+    go_from_neurons_settings->setText("ОТМЕНИТЬ");
+
+    save_neurons_settings = new QPushButton(neurons_counter_settings);
+    save_neurons_settings->resize(85, 40);
+    save_neurons_settings->move(105, 50);
+    save_neurons_settings->setFont(QFont("Rockwell", 10));
+    save_neurons_settings->setText("СОХРАНИТЬ");
+    connect(save_neurons_settings, SIGNAL(released()), this, SLOT(setupNeurons()));
+
 
     delete_neuron_btn_ = new QPushButton(editor_);
     delete_neuron_btn_->resize(110, 40);
@@ -197,29 +228,40 @@ App::App(int width, int height)
     connect(settings_btn_, SIGNAL(released()), this, SLOT(chooseSettings()));//
 
     settings_window_ = new QMainWindow();
-    settings_window_->resize(220, 120);
+    settings_window_->resize(220, 180);
 
     epoch_count_tablet_ = new QLineEdit(settings_window_);
     epoch_count_tablet_->resize(200, 30);
     epoch_count_tablet_->move(10, 10);
     epoch_count_tablet_->setPlaceholderText("Количество эпох");
 
-    csv_file_btn_ = new QPushButton(settings_window_);
-    csv_file_btn_->resize(200, 30);
-    csv_file_btn_->move(10, 50);
-    csv_file_btn_->setText("Выберите *.csv файл");
-    connect(csv_file_btn_, SIGNAL(released()), this, SLOT(loadCSVFromFile()));
+    learn_rate_count_tablet_ = new QLineEdit(settings_window_);
+    learn_rate_count_tablet_->resize(200, 30);
+    learn_rate_count_tablet_->move(10, 50);
+    learn_rate_count_tablet_->setPlaceholderText("Скорость обучения");
+
+    test_data_btn_ = new QPushButton(settings_window_);
+    test_data_btn_->resize(200, 30);
+    test_data_btn_->move(10, 80);
+    test_data_btn_->setText("Тестовые данные");
+    connect(test_data_btn_, SIGNAL(released()), this, SLOT(loadTestData()));
+
+    train_data_btn_ = new QPushButton(settings_window_);
+    train_data_btn_->resize(200, 30);
+    train_data_btn_->move(10, 110);
+    train_data_btn_->setText("Тренировочные данные");
+    connect(train_data_btn_, SIGNAL(released()), this, SLOT(loadTrainData()));
 
     save_settings_btn_ = new QPushButton(settings_window_);
     save_settings_btn_->resize(95, 30);
-    save_settings_btn_->move(115, 80);
+    save_settings_btn_->move(115, 140);
     save_settings_btn_->setFont(QFont("Rockwell", 12));
     save_settings_btn_->setText("СОХРАНИТЬ");
     connect(save_settings_btn_, SIGNAL(released()), this, SLOT(saveSettings()));
 
     go_from_settings_btn_ = new QPushButton(settings_window_);
     go_from_settings_btn_->resize(95, 30);
-    go_from_settings_btn_->move(10, 80);
+    go_from_settings_btn_->move(10, 140);
     go_from_settings_btn_->setFont(QFont("Rockwell", 12));
     go_from_settings_btn_->setText("ОТМЕНИТЬ");
     connect(go_from_settings_btn_, SIGNAL(released()), this, SLOT(closeSettings()));
@@ -315,17 +357,6 @@ void App::getUpdate() {
     }
 }
 
-void App::loadNNCFromFile()
-{
-    QString file = QFileDialog::getOpenFileName(nullptr, "Выберите nnc файл", "", "*.nnc");
-    QFile in(file);
-    if (!in.open(QIODevice::ReadOnly))
-        return;
-    QString data = in.readLine();
-    in.close();
-    if (data.isEmpty())
-        return;
-}
 
 void App::gotoBegin()
 {
@@ -396,7 +427,7 @@ void App::gotoSimulator()
 void App::drawInNeuron()
 {
     in_neuron_->setStyleSheet("QPushButton {background: #606060;"
-                              "border-radius: 40px;"
+                              "border-radius: 30px;"
                               "color: #ffffff;}");
     in_neuron_->setEnabled(false);
     nodes_.push_back(new Node(Neurons::In));
@@ -413,7 +444,7 @@ void App::drawFCLNeuron()
 void App::drawOutNeuron()
 {
     out_neuron_->setStyleSheet("QPushButton {background: #606060;"
-                              "border-radius: 40px;"
+                              "border-radius: 30px;"
                               "color: #ffffff;}");
     out_neuron_->setEnabled(false);
     nodes_.push_back(new Node(Neurons::Out));
@@ -426,12 +457,12 @@ void App::deleteNeuron() {
         node = dynamic_cast<Node*>(edit_scene_->selectedItems().takeFirst());
         if (node->getType() == Neurons::In) {
             in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
-                                      "border-radius: 40px;"
+                                      "border-radius: 30px;"
                                       "color: #ffffff;}");
             in_neuron_->setEnabled(true);
         } else if (node->getType() == Neurons::Out) {
             out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
-                                       "border-radius: 40px;"
+                                       "border-radius: 30px;"
                                        "color: #ffffff;}");
             out_neuron_->setEnabled(true);
         }
@@ -566,16 +597,14 @@ void App::chooseSettings() {
     settings_window_->show();
 }
 
-void App::loadCSVFromFile()
-{
+void App::loadTestData() {
     QString file = QFileDialog::getOpenFileName(nullptr, "Выберите csv файл", "", "*.csv");
-    QFile in(file);
-    if (!in.open(QIODevice::ReadOnly))
-        return;
-    QString data = in.readLine();
-    in.close();
-    if (data.isEmpty())
-        return;
+    test_data = file.toStdString();
+}
+
+void App::loadTrainData() {
+    QString file = QFileDialog::getOpenFileName(nullptr, "Выберите csv файл", "", "*.csv");
+    train_data = file.toStdString();
 }
 
 void App::closeSettings() {
@@ -584,6 +613,7 @@ void App::closeSettings() {
 
 void App::saveSettings() {
     epochs_ = epoch_count_tablet_->text().toInt();
+    learning_rate = learn_rate_count_tablet_->text().toInt();
     start_simulating_btn_->setStyleSheet("QPushButton {"
                                          "background: #505050 }");
     //магия с *.csv файл
@@ -591,7 +621,7 @@ void App::saveSettings() {
 }
 
 void App::start_simulating() {
-    if (!out_neuron_->isEnabled() && !in_neuron_->isEnabled() && epochs_ > 0 && is_exist_edge_to_leaf_) {
+    if (!out_neuron_->isEnabled() && !in_neuron_->isEnabled() && epochs_ > 0 && is_exist_edge_to_leaf_ && learning_rate > 0) {
         std::string string_epochs_ = "эпоха\n1/\n"+std::to_string(epochs_);
         epoch_count_->setText(QString::fromStdString(string_epochs_));
         cur_epochs = 1;
@@ -599,6 +629,31 @@ void App::start_simulating() {
             e->setMark(false);
             e->setFlag(QGraphicsItem::ItemIsMovable, false);
             e->setSelected(false);
+        }
+        for (auto e : graph_) {
+            if (!e.second.second) {
+                for (auto elem : e.second.first) {
+                    vgraph_[(void*)e.first].first.push_back((void*)elem);
+                }
+                if (e.first == last_) {
+                    vgraph_[(void*)e.first].second = true;
+                }
+            }
+        }
+        for (auto e : graph_) {
+            if (!e.second.second) {
+                if (e.first->getType() == Neurons::FCL) {
+                    if (e.first->getFunc() == ActivationFunc::ReLu) {
+                        activations[(void*)e.first] = 1;
+                    } else if (e.first->getFunc() == ActivationFunc::Sigmoid) {
+                        activations[(void*)e.first] = 2;
+                    } else {
+                        activations[(void*)e.first] = 3;
+                    }
+                }
+                values_nums[(void*)e.first] = e.first->getNeuronsCount();
+                is_input[(void*)e.first] = (e.first->getType() == Neurons::In);
+            }
         }
         gotoSimulator();
     }
@@ -655,21 +710,26 @@ void App::saveEpoSettings() {
 }
 
 void App::clearEditScene() {
-    edit_scene_->clear();
-    nodes_.clear();
-    graph_.clear();
-    is_exist_edge_to_leaf_ = false;
-    cur_epochs = 1;
-    epochs_ = -1;
-    in_neuron_->setStyleSheet("QPushButton {background: #60dc65;"
-                              "border-radius: 40px;"
-                              "color: #ffffff;}");
-    in_neuron_->setEnabled(true);
-
-    out_neuron_->setStyleSheet("QPushButton {background: #e93f3f;"
-    "border-radius: 40px;"
-    "color: #ffffff;}");
-    out_neuron_->setEnabled(true);
-
     gotoEditor();
+}
+
+void App::setCount() {
+    neurons_counter_settings->show();
+}
+
+void App::goFromNeuronsSettings() {
+    neurons_counter_tablet_->clear();
+    neurons_counter_settings->hide();
+}
+
+void App::setupNeurons() {
+    if(edit_scene_->selectedItems().size() == 0) {
+        return;
+    } else if (edit_scene_->selectedItems().size() == 1
+               && (node = dynamic_cast<Node *> (edit_scene_->selectedItems().at(0)))) {
+        node->setNeuronsCount(neurons_counter_tablet_->text().toInt());
+        neurons_counter_tablet_->clear();
+        node->update();
+    }
+    neurons_counter_settings->hide();
 }

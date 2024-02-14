@@ -29,7 +29,10 @@ public:
     void addEdge(Edge *edge); // добавление ребра
     void setMark(bool mark); // установка выделенности
     void setSimulateMod();
+    ActivationFunc getFunc();
     void setFunc(ActivationFunc func);
+    void setNeuronsCount(int n);
+    int getNeuronsCount();
 
 protected:
     QVariant itemChange(GraphicsItemChange change, // смена фокуса на вершине
@@ -41,6 +44,7 @@ private:
     QList<Edge *> edgeList; // массив ребёр, связанных с ним
     bool _mark; // метка выделенности
     bool is_in_dfs_ = false;
+    int neurons_count_ = 1;
     Neurons _type; // тип нейрона
     ActivationFunc _func = ActivationFunc::ReLu;
 };

@@ -64,19 +64,23 @@ QPainterPath Node::shape() const
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    std::string text = "";
+    std::string text1 = "", text2 = "";
     if (this->_type == Neurons::FCL) {
         if (this->_func == ActivationFunc::ReLu) {
-            text = "ReLu";
+            text1 = "ReLu";
+            text2 = std::to_string(this->neurons_count_);
         } else if (this->_func == ActivationFunc::Sigmoid) {
-            text = "Sigmoid";
+            text1 = "Sigmoid";
+            text2 = std::to_string(this->neurons_count_);
         } else {
-            text = "Tanh";
+            text1 = "Tanh";
+            text2 = std::to_string(this->neurons_count_);
         }
     } else if (this->_type == Neurons::In) {
-        text = "IN";
+        text1= "IN";
+        text2 = std::to_string(this->neurons_count_);
     } else {
-        text = "OUT";
+        text1 = "OUT";
     }
     if (this->_type == Neurons::In) {
         painter->setBrush((option->state & QStyle::State_Selected ? QColor(188,240,190) : QColor(96, 220, 101)));
@@ -92,7 +96,8 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
     painter->setPen(QPen(_mark ? Qt::white : Qt::black, 2));
     painter->drawEllipse(-RADIUS, -RADIUS, 2 * RADIUS, 2 * RADIUS);
-    painter->drawText(-22, 4, QString::fromStdString(text));
+    painter->drawText(-24,  -4, QString::fromStdString(text1));
+    painter->drawText(-24, 14, QString::fromStdString(text2));
 }
 
 
@@ -134,4 +139,15 @@ void Node::setSimulateMod() {
 
 void Node::setFunc(ActivationFunc func) {
     this->_func = func;
+}
+ActivationFunc Node::getFunc() {
+    return this->_func;
+}
+
+void Node::setNeuronsCount(int n) {
+    this->neurons_count_ = n;
+}
+
+int Node::getNeuronsCount() {
+    return this->neurons_count_;
 }

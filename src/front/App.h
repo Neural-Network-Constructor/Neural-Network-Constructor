@@ -15,7 +15,7 @@ public:
     }
 
 private slots:
-    void loadNNCFromFile();// загрузка из файла
+    void loadTrainData();// загрузка из файла
     void gotoBegin(); // возвращение к стартовому экрану
     void gotoEditor(); // возвращение к редактору
     void gotoSimulator(); // возвращение к симуляции
@@ -28,7 +28,7 @@ private slots:
     void graphWidgetClicked(QMouseEvent *event); // создание ребра
     void connectNodes();
     void chooseSettings();
-    void loadCSVFromFile();
+    void loadTestData();
     void closeSettings();
     void saveSettings();
     void start_simulating();
@@ -42,9 +42,19 @@ private slots:
     void setupSigmoidFunc();
     void clearEditScene();
     void setupHiptanFunc();
+    void setCount();
+    void setupNeurons();
+    void goFromNeuronsSettings();
 
 private:
     std::map <Node*, std::pair<std::vector<Node*>, bool> > graph_;
+    std::map <void*, std::pair<std::vector<void*>, bool> > vgraph_;
+    std::map <void*, uint8_t> activations;
+    std::map <void*, uint32_t> values_nums;
+    std::map <void*, bool> is_input;
+    double learning_rate = -1;
+    std::string train_data;
+    std::string test_data;
     std::map <Node*, int> used_;
     Node* node, *root_, *leaf_, *last_;
     bool is_exist_edge_to_leaf_ = false;
@@ -71,6 +81,11 @@ private:
     QPushButton* in_neuron_;
     QPushButton* FCL_neuron_;
     QPushButton* out_neuron_;
+    QPushButton* set_neuron_count_btn_;
+    QMainWindow* neurons_counter_settings;
+    QLineEdit* neurons_counter_tablet_;
+    QPushButton* go_from_neurons_settings;
+    QPushButton* save_neurons_settings;
     QPushButton* delete_neuron_btn_;
     QPushButton* add_edge_btn_;
     QLabel* func_text;
@@ -80,9 +95,11 @@ private:
     QPushButton* settings_btn_;
     QWidget* settings_window_;
     QLineEdit* epoch_count_tablet_;
+    QLineEdit* learn_rate_count_tablet_;
     QLabel* csv_file_text_;
     QPushButton* our_csv_file;
-    QPushButton* csv_file_btn_;
+    QPushButton* test_data_btn_;
+    QPushButton* train_data_btn_;
     QPushButton* save_settings_btn_;
     QPushButton* go_from_settings_btn_;
 
