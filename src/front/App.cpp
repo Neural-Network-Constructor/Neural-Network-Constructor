@@ -205,6 +205,8 @@ App::App(int width, int height)
     epoch_count_tablet_->move(10, 10);
     epoch_count_tablet_->setPlaceholderText("Количество эпох");
 
+
+
     csv_file_btn_ = new QPushButton(settings_window_);
     csv_file_btn_->resize(200, 30);
     csv_file_btn_->move(10, 50);
@@ -490,7 +492,8 @@ void App::graphWidgetClicked(QMouseEvent *event)
                         // Если нашлась выделенная вершина.
                         if (nSourse->getType() ==  Neurons::Out ||
                             node->getType() == Neurons::In ||
-                            (node->getType() == Neurons::Out && is_exist_edge_to_leaf_)) {
+                            (node->getType() == Neurons::Out && is_exist_edge_to_leaf_) ||
+                            nSourse->getType() == Neurons::In && node->getType() == Neurons::Out) {
 
                         } else {
                             Edge *e = new Edge(nSourse, node);

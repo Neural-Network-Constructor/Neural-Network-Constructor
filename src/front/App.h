@@ -81,6 +81,7 @@ private:
     QWidget* settings_window_;
     QLineEdit* epoch_count_tablet_;
     QLabel* csv_file_text_;
+    QPushButton* our_csv_file;
     QPushButton* csv_file_btn_;
     QPushButton* save_settings_btn_;
     QPushButton* go_from_settings_btn_;
