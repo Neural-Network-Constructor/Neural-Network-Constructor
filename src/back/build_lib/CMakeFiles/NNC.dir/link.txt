@@ -1,0 +1,1 @@
+/usr/sbin/c++ -fPIC  -std=c++23 -shared -Wl,-soname,libNNC.so.1.0.0 -o libNNC.so.1.0.0 CMakeFiles/NNC.dir/source/Model/Layer.cpp.o CMakeFiles/NNC.dir/source/Model/FullyConnectedLayer.cpp.o CMakeFiles/NNC.dir/source/Model/InputLayer.cpp.o CMakeFiles/NNC.dir/source/Model/Activations.cpp.o CMakeFiles/NNC.dir/source/Model/Model.cpp.o 

@@ -1,0 +1,7 @@
+/home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/build_lib/CMakeFiles/NNC.dir
+/home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/build_lib/CMakeFiles/edit_cache.dir
+/home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/build_lib/CMakeFiles/rebuild_cache.dir
+/home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/build_lib/CMakeFiles/list_install_components.dir
+/home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/build_lib/CMakeFiles/install.dir
+/home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/build_lib/CMakeFiles/install/local.dir
+/home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/build_lib/CMakeFiles/install/strip.dir

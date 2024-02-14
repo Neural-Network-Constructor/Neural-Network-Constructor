@@ -47,5 +47,10 @@ Model::Model(
     }
   }
 
-  // [TODO] Add layer connection
+  for (auto layer_from : graph) {
+    for (auto layer_to : this->graph[layer_from.first].first) {
+      this->layers[layer_to]->AddOutput(this->layers[layer_from.first]);
+    }
+  }
+
 }

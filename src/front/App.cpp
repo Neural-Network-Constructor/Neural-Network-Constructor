@@ -655,6 +655,7 @@ void App::start_simulating() {
                 is_input[(void*)e.first] = (e.first->getType() == Neurons::In);
             }
         }
+        // вот тут создам ебанину
         gotoSimulator();
     }
 }

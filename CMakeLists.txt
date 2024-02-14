@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.6.0)
 project(NNC)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -19,6 +19,13 @@ find_package(Qt6 COMPONENTS
     REQUIRED
 )
 
+add_library(libNNC SHARED IMPORTED)
+set_target_properties(libNNC PROPERTIES IMPORTED_LOCATION
+  ../libNNC/libNNC.so.1.0.0
+  # ./src/back/build_lib/libNNC.so.1.0.0
+)
+target_include_directories(libNNC INTERFACE ./src/back/source/)
+
 add_executable(NNC
     src/main.cpp
     src/front/App.cpp
@@ -30,8 +37,9 @@ add_executable(NNC
     src/front/Edge.cpp
 
 )
-target_link_libraries(NNC
+target_link_libraries(NNC PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
+    libNNC
 )
