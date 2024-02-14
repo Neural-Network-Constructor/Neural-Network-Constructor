@@ -36,21 +36,35 @@ Model::Model(
 
   for (auto curr_layer : graph) {
     if (this->is_input[curr_layer.first] == 1) {
-      layers[curr_layer.first] =
+      this->layers[curr_layer.first] =
           new InputLayer(this->values_nums[curr_layer.first]);
     } else {
-      layers[curr_layer.first] =
-          new FullyConnectedLayer(this->values_nums[curr_layer.first],
-                                  this->activations[curr_layer.first].first,
-                                  this->activations[curr_layer.first].second,
-                                  this->graph[curr_layer.first].second, this->learning_rate);
+      this->layers[curr_layer.first] = new FullyConnectedLayer(
+          this->values_nums[curr_layer.first],
+          this->activations[curr_layer.first].first,
+          this->activations[curr_layer.first].second,
+          this->graph[curr_layer.first].second, this->learning_rate);
     }
   }
 
-  for (auto layer_from : graph) {
-    for (auto layer_to : this->graph[layer_from.first].first) {
-      this->layers[layer_to]->AddOutput(this->layers[layer_from.first]);
+  for (auto layer_from : this->graph) {
+    this->layers_ids.push_back(layer_from.first);
+  }
+
+
+  for (void *from_layer_id : this->layers_ids) {
+    std::cout << from_layer_id << ": " << '\n';
+    std::vector<void *> to_layers = this->graph[from_layer_id].first;
+    for (void *to_layer_id : to_layers) {
+      std::cout << "\t" << from_layer_id << " > " << to_layer_id << '\n';
+      if (this->graph.count(to_layer_id) != 0){
+        this->layers[to_layer_id]->ConnectTo(this->layers[from_layer_id]);
+      }
     }
   }
 
+  for (auto curr_layer : this->layers) {
+    curr_layer.second->PrintInfo();
+    std::cout << "\n\n";
+  }
 }

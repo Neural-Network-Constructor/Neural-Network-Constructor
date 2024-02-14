@@ -22,6 +22,8 @@ private:
   std::string train_data_file_path;
   std::string test_data_file_path;
 
+  std::vector<void *> layers_ids;
+
   std::map<void *, Layer *> layers;
 
 public:

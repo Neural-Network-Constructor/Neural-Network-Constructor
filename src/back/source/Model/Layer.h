@@ -42,6 +42,8 @@ public:
   // Зануление значений нейронов в слое
   virtual void ClearValues();
 
+  virtual void PrintInfo();
+
   // Геттер для values
   virtual std::vector<double> GetValues();
 

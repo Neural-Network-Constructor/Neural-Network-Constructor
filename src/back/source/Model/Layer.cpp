@@ -37,11 +37,11 @@ Layer::Layer(const uint32_t &values_num,
 }
 
 void Layer::Predict() {
-  std::cout << "[Error] Predict() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
+  std::cerr << "[Error] Predict() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
 }
 
 void Layer::Learn() {
-  std::cout << "[Error] Learn() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
+  std::cerr << "[Error] Learn() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
 }
 
 void Layer::ClearValues() {
@@ -68,3 +68,6 @@ void Layer::ConnectTo(Layer *input) {
 
 uint32_t Layer::GetValuesNum() const { return this->values_num; }
 
+void Layer::PrintInfo(){
+  std::cerr << "[Error] PrintInfo() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
+}

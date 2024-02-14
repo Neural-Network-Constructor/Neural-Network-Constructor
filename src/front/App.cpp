@@ -1,4 +1,5 @@
 #include "App.h"
+#include <Model/Model.h>
 
 App::App(int width, int height)
 {
@@ -655,7 +656,11 @@ void App::start_simulating() {
                 is_input[(void*)e.first] = (e.first->getType() == Neurons::In);
             }
         }
-        // вот тут создам ебанину
+
+        std::cout << "2\n";
+        Model model(vgraph_, activations, values_nums, is_input, learning_rate, train_data, test_data);
+        std::cout << "3\n";
+        
         gotoSimulator();
     }
 }
