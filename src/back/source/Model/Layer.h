@@ -17,19 +17,22 @@ protected:
   std::function<double(double)> activation; // Функция активации
   std::function<double(double)>
       activation_derivative; // Приозводная функции активации
+  double learning_rate;
 
 public:
+  double error = 0;
+
   Layer() = default;
   ~Layer() = default;
 
   // Конструктор от количества нейронов в слое, функции активации и ее
   // производной
   Layer(const uint32_t &, const std::function<double(double)> &,
-        const std::function<double(double)> &);
+        const std::function<double(double)> &, const double &);
   // Конструктор от количества нейронов в слое, функции активации, ее
   // производной, и переменной, которая показывает является ли слой выходным
   Layer(const uint32_t &, const std::function<double(double)> &,
-        const std::function<double(double)> &, const bool &);
+        const std::function<double(double)> &, const bool &, const double &);
 
   // Функция, которая считает значения нейронов в слое и сохраняет их в values
   virtual void Predict();

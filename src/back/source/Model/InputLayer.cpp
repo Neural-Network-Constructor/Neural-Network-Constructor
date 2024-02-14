@@ -3,10 +3,10 @@
 #include <stdexcept>
 
 InputLayer::InputLayer(const uint32_t &values_num, const bool &is_output)
-  : Layer(values_num, activations::ReLU, activations::ReLU_derivative, is_output) {}
+  : Layer(values_num, activations::ReLU, activations::ReLU_derivative, is_output, 0) {}
 
 InputLayer::InputLayer(const uint32_t &values_num)
-  : Layer(values_num, activations::ReLU, activations::ReLU_derivative) {}
+  : Layer(values_num, activations::ReLU, activations::ReLU_derivative, 0) {}
 
 void InputLayer::SetValues(const std::vector <double> &values){
   if (values.size() != this->values_num){

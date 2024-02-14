@@ -16,4 +16,6 @@ add_executable(NNC
   # ./source/Model/OutputLayer.cpp
   ./source/Model/Activations.h
   ./source/Model/Activations.cpp
+  ./source/Model/Model.h
+  ./source/Model/Model.cpp
 )

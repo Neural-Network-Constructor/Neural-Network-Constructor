@@ -10,9 +10,11 @@
 
 Layer::Layer(const uint32_t &values_num,
              const std::function<double(double)> &activation,
-             const std::function<double(double)> &activation_derivative) {
+             const std::function<double(double)> &activation_derivative, const double &learning_rate) {
   this->activation = activation;
   this->activation_derivative = activation_derivative;
+
+  this->learning_rate = learning_rate;
 
   this->values_num = values_num;
   this->values.resize(values_num);
@@ -22,10 +24,12 @@ Layer::Layer(const uint32_t &values_num,
 Layer::Layer(const uint32_t &values_num,
              const std::function<double(double)> &activation,
              const std::function<double(double)> &activation_derivative,
-             const bool &is_output) {
-  this->is_output = is_output;
+             const bool &is_output, const double &learning_rate) {
   this->activation = activation;
   this->activation_derivative = activation_derivative;
+
+  this->is_output = is_output;
+  this->learning_rate = learning_rate;
 
   this->values_num = values_num;
   this->values.resize(values_num);
