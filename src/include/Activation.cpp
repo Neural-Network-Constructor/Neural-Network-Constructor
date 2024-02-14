@@ -7,25 +7,42 @@ double Sigmoid(double x)
 {
     return 1 / (1 + std::exp(-x));
 }
+double SigmoidDerivative(double x)
+{
+    double sigma = Sigmoid(x);
+    return sigma * (1 - sigma);
+}
+
 double Relu(double x)
 {
     return std::max(0., x);
 }
+double ReluDerivative(double x)
+{
+    return x > 0 ? 1 : 0;
+}
+
 double Tanh(double x)
 {
     return (std::exp(x) - std::exp(-x)) / (std::exp(x) + std::exp(-x));
 }
-std::vector<double> Softmax(std::vector<double> z)
+double TanhDerivative(double x)
+{
+    double sigma = Tanh(x);
+    return 1 - sigma * sigma;
+}
+
+double Softmax(std::vector<double> z, double i)
 {
     int K = z.size();
-    std::vector<double> softmax(z.size(), 0);
     double Sigma = 0;
-    for (int i = 0; i < K; ++i)
+    for (int j = 0; j < K; ++j)
     {
-        Sigma += std::exp(z[i]);
+        Sigma += std::exp(z[j]);
     }
-    for (int i = 0; i < K; ++i)
-    {
-        softmax[i] = std::exp(z[i] / Sigma);
-    }
+    return std::exp(z[i]) / Sigma;
+}
+double SoftmaxDerivative(double x)
+{
+    return x * (1 - x);
 }

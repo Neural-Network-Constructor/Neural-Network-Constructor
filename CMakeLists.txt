@@ -23,10 +23,10 @@ add_executable(NNC
     src/main.cpp
     src/front/App.cpp
     src/front/App.h
-    src/front/header.h
     src/front/Node.cpp
     src/front/Node.h
-        src/front/graphwidget.cpp
+    src/front/graphwidget.cpp
+    src/front/graphwidget.h
     src/front/Edge.cpp
 
 )
