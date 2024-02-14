@@ -1,5 +1,4 @@
 #include "App.h"
-#include "widget.h"
 
 App::App(int width, int height)
 {

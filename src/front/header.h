@@ -39,3 +39,11 @@ enum class ActivationFunc
     Sigmoid,
     Hiptan
 };
+
+namespace CONN {
+    enum {
+        NONE,
+        NEED_SOURCE,
+        NEED_DEST
+    };
+}

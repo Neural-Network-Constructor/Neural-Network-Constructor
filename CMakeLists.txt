@@ -26,10 +26,8 @@ add_executable(NNC
     src/front/header.h
     src/front/Node.cpp
     src/front/Node.h
-    src/front/widget.h
-    src/front/graphwidget.cpp
+        src/front/graphwidget.cpp
     src/front/Edge.cpp
-    src/front/widget.cpp
 
 )
 target_link_libraries(NNC
