@@ -43,6 +43,9 @@ public:
   virtual void ClearValues();
 
   virtual void PrintInfo();
+  
+  virtual void SetValues(const std::vector <double> &);
+  virtual void SetDesiredValues(const std::vector <double> &);
 
   // Геттер для values
   virtual std::vector<double> GetValues();

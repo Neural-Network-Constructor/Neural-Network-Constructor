@@ -164,7 +164,7 @@ void FullyConnectedLayer::Learn() {
   }
 
   this->error = 0;
-  std::cout << "сам обучись сука \t"
-            << "error = " << total_error << " / " << this->desired_values[0]
-            << ' ' << this->values[0] << '\n';
+  // std::cout << "сам обучись сука \t"
+  //           << "error = " << total_error << " / " << this->desired_values[0]
+  //           << ' ' << this->values[0] << '\n';
 }

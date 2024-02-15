@@ -11,4 +11,7 @@ public:
   void SetValues(const std::vector <double> &);
   
   void PrintInfo();
+
+  void Predict(){}
+  void Learn(){}
 };

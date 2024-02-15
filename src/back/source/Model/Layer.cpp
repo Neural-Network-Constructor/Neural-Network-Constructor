@@ -37,11 +37,11 @@ Layer::Layer(const uint32_t &values_num,
 }
 
 void Layer::Predict() {
-  std::cerr << "[Error] Predict() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
+  std::cerr << "[Error] Predict() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)" << '\n';
 }
 
 void Layer::Learn() {
-  std::cerr << "[Error] Learn() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
+  std::cerr << "[Error] Learn() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)" << '\n';
 }
 
 void Layer::ClearValues() {
@@ -69,5 +69,13 @@ void Layer::ConnectTo(Layer *input) {
 uint32_t Layer::GetValuesNum() const { return this->values_num; }
 
 void Layer::PrintInfo(){
-  std::cerr << "[Error] PrintInfo() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)";
+  std::cerr << "[Error] PrintInfo() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)" << '\n';
+}
+
+void Layer::SetValues(const std::vector <double> &){
+  std::cerr << "[Error] SetValues() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)" << '\n';
+}
+
+void Layer::SetDesiredValues(const std::vector <double> &){
+  std::cerr << "[Error] SetValues() called in Layer class (по чьей вине вызвалось, тот уебок) (потом сделаю throw)" << '\n';
 }

@@ -941,6 +941,7 @@ CMakeFiles/NNC.dir/source/Model/Model.cpp.o: /home/artem627/Documents/Porjects/N
   /usr/include/c++/13.2.1/bit \
   /usr/include/c++/13.2.1/bits/algorithmfwd.h \
   /usr/include/c++/13.2.1/bits/alloc_traits.h \
+  /usr/include/c++/13.2.1/bits/allocated_ptr.h \
   /usr/include/c++/13.2.1/bits/allocator.h \
   /usr/include/c++/13.2.1/bits/basic_ios.h \
   /usr/include/c++/13.2.1/bits/basic_ios.tcc \
@@ -966,6 +967,7 @@ CMakeFiles/NNC.dir/source/Model/Model.cpp.o: /home/artem627/Documents/Porjects/N
   /usr/include/c++/13.2.1/bits/ios_base.h \
   /usr/include/c++/13.2.1/bits/istream.tcc \
   /usr/include/c++/13.2.1/bits/iterator_concepts.h \
+  /usr/include/c++/13.2.1/bits/list.tcc \
   /usr/include/c++/13.2.1/bits/locale_classes.h \
   /usr/include/c++/13.2.1/bits/locale_classes.tcc \
   /usr/include/c++/13.2.1/bits/locale_facets.h \
@@ -1003,6 +1005,7 @@ CMakeFiles/NNC.dir/source/Model/Model.cpp.o: /home/artem627/Documents/Porjects/N
   /usr/include/c++/13.2.1/bits/stl_iterator.h \
   /usr/include/c++/13.2.1/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/13.2.1/bits/stl_iterator_base_types.h \
+  /usr/include/c++/13.2.1/bits/stl_list.h \
   /usr/include/c++/13.2.1/bits/stl_map.h \
   /usr/include/c++/13.2.1/bits/stl_multimap.h \
   /usr/include/c++/13.2.1/bits/stl_pair.h \
@@ -1049,6 +1052,7 @@ CMakeFiles/NNC.dir/source/Model/Model.cpp.o: /home/artem627/Documents/Porjects/N
   /usr/include/c++/13.2.1/iostream \
   /usr/include/c++/13.2.1/istream \
   /usr/include/c++/13.2.1/limits \
+  /usr/include/c++/13.2.1/list \
   /usr/include/c++/13.2.1/map \
   /usr/include/c++/13.2.1/new \
   /usr/include/c++/13.2.1/numbers \
@@ -1119,6 +1123,10 @@ CMakeFiles/NNC.dir/source/Model/Model.cpp.o: /home/artem627/Documents/Porjects/N
 /usr/include/c++/13.2.1/utility:
 
 /usr/include/c++/13.2.1/bits/stl_relops.h:
+
+/usr/include/c++/13.2.1/bits/stl_list.h:
+
+/usr/include/c++/13.2.1/bits/allocated_ptr.h:
 
 /home/artem627/Documents/Porjects/Neural-Network-Constructor/src/back/source/Model/Model.h:
 
@@ -1328,6 +1336,8 @@ CMakeFiles/NNC.dir/source/Model/Model.cpp.o: /home/artem627/Documents/Porjects/N
 
 /usr/include/bits/byteswap.h:
 
+/usr/include/c++/13.2.1/list:
+
 /usr/include/c++/13.2.1/bits/concept_check.h:
 
 /usr/include/bits/mathcalls.h:
@@ -1447,6 +1457,8 @@ CMakeFiles/NNC.dir/source/Model/Model.cpp.o: /home/artem627/Documents/Porjects/N
 /usr/include/c++/13.2.1/x86_64-pc-linux-gnu/bits/c++allocator.h:
 
 /usr/include/c++/13.2.1/x86_64-pc-linux-gnu/bits/c++config.h:
+
+/usr/include/c++/13.2.1/bits/list.tcc:
 
 /usr/include/bits/types/sigset_t.h:
 

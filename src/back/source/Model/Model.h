@@ -26,9 +26,31 @@ private:
 
   std::map<void *, Layer *> layers;
 
+  Layer* input_layer;
+  Layer* output_layer;
+
+  std::vector <Layer*> forward_propogation_list;
+  std::vector <Layer*> backward_propogation_list;
+
+
+  std::vector <Layer*> Dfs(const std::map<Layer *, std::vector<Layer *>> &, Layer*);
+
+
 public:
   Model(const std::map<void *, std::pair<std::vector<void *>, bool>> &,
         const std::map<void *, uint8_t> &, const std::map<void *, uint32_t> &,
         const std::map<void *, bool> &, const double &, const std::string &,
         const std::string &);
+
+  void ForwardDfs();
+  void BackwardDfs();
+
+  void SetValues(const std::vector <double> &);
+  void SetDesiredValues(const std::vector <double> &);
+
+  void Predict();
+
+  void Learn();
+
+  void TEST_function();
 };
