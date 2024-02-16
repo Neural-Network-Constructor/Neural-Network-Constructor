@@ -13,33 +13,34 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
 endif()
 
 find_package(Qt6 COMPONENTS
-    Core
-    Gui
-    Widgets
-    REQUIRED
+        Core
+        Gui
+        Widgets
+        REQUIRED
 )
 
 add_library(libNNC SHARED IMPORTED)
 set_target_properties(libNNC PROPERTIES IMPORTED_LOCATION
-  ../libNNC/libNNC_lib.so.1.0.0
-  # ./src/back/build_lib/libNNC_lib.so.1.0.0
+#        libNNC/libNNC.so.1.0.0
+#        libNNC/libNNC.1.0.0.dylib
+        ../libNNC/libNNC_lib.1.0.0.dylib
 )
 target_include_directories(libNNC INTERFACE ./src/back/source/)
 
 add_executable(NNC
-    src/main.cpp
-    src/front/App.cpp
-    src/front/App.h
-    src/front/Node.cpp
-    src/front/Node.h
-    src/front/graphwidget.cpp
-    src/front/graphwidget.h
-    src/front/Edge.cpp
+        src/main.cpp
+        src/front/App.cpp
+        src/front/App.h
+        src/front/Node.cpp
+        src/front/Node.h
+        src/front/graphwidget.cpp
+        src/front/graphwidget.h
+        src/front/Edge.cpp
 
 )
 target_link_libraries(NNC PUBLIC
-    Qt::Core
-    Qt::Gui
-    Qt::Widgets
-    libNNC
+        Qt::Core
+        Qt::Gui
+        Qt::Widgets
+        libNNC
 )

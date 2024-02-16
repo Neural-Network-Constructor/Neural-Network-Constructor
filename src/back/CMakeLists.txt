@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(NNC_lib VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
 # add_executable(NNC_lib
 #   ./source/main.cpp
@@ -30,8 +30,8 @@ add_library(NNC_lib SHARED
   ./source/Model/Activations.cpp
   ./source/Model/Model.h
   ./source/Model/Model.cpp
-        source/Model/State.cpp
-        source/Model/State.h
+  ./source/Model/State.cpp
+  ./source/Model/State.h
 )
 
 set_target_properties(NNC_lib PROPERTIES VERSION 1.0.0)

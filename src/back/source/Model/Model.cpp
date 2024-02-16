@@ -74,7 +74,7 @@ Model::Model(
     std::cout << "\n\n";
   }
 
-  this->TEST_function();
+//  this->TEST_function();
 }
 
 void Model::SetValues(const std::vector<double> &values) {
@@ -165,60 +165,65 @@ void Model::Learn() {
   }
 }
 
-void Model::TEST_function() {
-  this->ForwardDfs();
-  this->BackwardDfs();
-
-  int q = 40000;
-
-  std::vector<std::vector<double>> values_in;
-  std::vector<std::vector<double>> values_out;
-
-  for (int i = 0; i < q; ++i) {
-    double x = (static_cast<double>(rand()) / RAND_MAX - 0.5) * 10 + 1;
-    double y = (static_cast<double>(rand()) / RAND_MAX - 0.5) * 10 + 1;
-    double ans;
-
-    if (0.25 * x - y + 1 >= 0) {
-      ans = 1;
-    } else {
-      ans = 0;
-    }
-
-    values_in.push_back({x, y});
-    values_out.push_back({ans});
-  }
-
-  for (int i = 0; i < q; ++i) {
-    this->SetValues(values_in[i]);
-    this->Predict();
-
-    // std::cout << values_out[i][0] << ": " << this->output_layer->GetValues()[0] << '\n';
-    std::cout << i << "/" << q << ": " << (values_out[i][0] - this->output_layer->GetValues()[0]) * (values_out[i][0] - this->output_layer->GetValues()[0]) << '\n';
-
-    this->SetDesiredValues(values_out[i]);
-    this->Learn();
-
-//    for (void* curr_layer : this->layers_ids){
-//      std::cout << this->layers[curr_layer] << ": " << this->layers[curr_layer]->error;
-//      if (this->layers[curr_layer] == this->input_layer){
-//        std::cout << "\t (input)";
-//      } else if (this->layers[curr_layer] == this->output_layer){
-//        std::cout << "\t (output)";
-//      }
-//      std::cout << '\n';
-//        this->layers[curr_layer]->error = 0;
-//        this->layers[curr_layer]->loss = 0;
+//void Model::TEST_function() {
+//  this->ForwardDfs();
+//  this->BackwardDfs();
+//
+//  int q = 40000;
+//
+//  std::vector<std::vector<double>> values_in;
+//  std::vector<std::vector<double>> values_out;
+//
+//  for (int i = 0; i < q; ++i) {
+//    double x = (static_cast<double>(rand()) / RAND_MAX - 0.5) * 10 + 1;
+//    double y = (static_cast<double>(rand()) / RAND_MAX - 0.5) * 10 + 1;
+//    double ans;
+//
+//    if (0.25 * x - y + 1 >= 0) {
+//      ans = 1;
+//    } else {
+//      ans = 0;
 //    }
+//
+//    values_in.push_back({x, y});
+//    values_out.push_back({ans});
+//  }
+//
+//  for (int i = 0; i < q; ++i) {
+//    this->SetValues(values_in[i]);
+//    this->Predict();
+//
+//    // std::cout << values_out[i][0] << ": " << this->output_layer->GetValues()[0] << '\n';
+////    std::cout << i << "/" << q << ": " << (values_out[i][0] - this->output_layer->GetValues()[0]) * (values_out[i][0] - this->output_layer->GetValues()[0]) << '\n';
+//
+//    this->SetDesiredValues(values_out[i]);
+//    this->Learn();
+//
+////    for (void* curr_layer : this->layers_ids){
+////      std::cout << this->layers[curr_layer] << ": " << this->layers[curr_layer]->error;
+////      if (this->layers[curr_layer] == this->input_layer){
+////        std::cout << "\t (input)";
+////      } else if (this->layers[curr_layer] == this->output_layer){
+////        std::cout << "\t (output)";
+////      }
+////      std::cout << '\n';
+////        this->layers[curr_layer]->error = 0;
+////        this->layers[curr_layer]->loss = 0;
+////    }
+//
+////    std::cout << "---" << '\n';
+//  }
+//
+//    for (auto curr_layer : this->layers) {
+//        curr_layer.second->PrintInfo();
+//        std::cout << "\n\n";
+//    }
+//}
 
-//    std::cout << "---" << '\n';
-  }
-
-    for (auto curr_layer : this->layers) {
-        curr_layer.second->PrintInfo();
-        std::cout << "\n\n";
-    }
+void Model::TEST_function() {
+    std::cout << "Model::TEST_function()" << '\n';
 }
+
 
 //State Model::GetState(void *layer_id) {
 //    return this->layers[layer_id]->GetState();
@@ -235,9 +240,104 @@ std::map <Layer*, State> Model::SetEpoch(const uint32_t &epoch) {
         this->test_data.clear();
         this->test_data.seekg(0);
 
-        while(!train_data.eof()){
-            std::cout << "q";
+        std::string raw_line;
+        while(getline(this->train_data, raw_line)){
+            std::vector <std::string> line_string_data;
+            std::string curr_data = "";
+            for (char symbol : raw_line){
+                if (symbol == ';'){
+                    line_string_data.push_back(curr_data);
+                    curr_data = "";
+                } else {
+                    curr_data += symbol;
+                }
+            }
+            line_string_data.push_back(curr_data);
+
+            std::vector <double> input_data(this->input_layer->GetValuesNum());
+            for (uint32_t i = 0; i < this->input_layer->GetValuesNum(); ++i){
+                input_data[i] = std::stod(line_string_data[i]);
+            }
+
+            std::vector <double> output_data(this->output_layer->GetValuesNum());
+            for (uint32_t i = 0; i < this->output_layer->GetValuesNum(); ++i){
+                output_data[i] = std::stod(line_string_data[this->input_layer->GetValuesNum() + i]);
+            }
+
+            this->SetValues(input_data);
+            this->Predict();
+            this->SetDesiredValues(output_data);
+            this->Learn();
+
+            for (auto el : input_data){
+                std::cout << el << " ";
+            }
+            std::cout << " | ";
+            for (auto el : output_data){
+                std::cout << el << " ";
+            }
+            std::cout << " | ";
+
+            std::cout << this->output_layer->error << '\n';
         }
+
+        uint64_t correct_answers = 0;
+        uint64_t all_answers = 0;
+        raw_line = "";
+        while(getline(this->test_data, raw_line)){
+            std::vector <std::string> line_string_data;
+            std::string curr_data = "";
+            for (char symbol : raw_line){
+                if (symbol == ';'){
+                    line_string_data.push_back(curr_data);
+                    curr_data = "";
+                } else {
+                    curr_data += symbol;
+                }
+            }
+            line_string_data.push_back(curr_data);
+
+            std::vector <double> input_data(this->input_layer->GetValuesNum());
+            for (uint32_t i = 0; i < this->input_layer->GetValuesNum(); ++i){
+                input_data[i] = std::stod(line_string_data[i]);
+            }
+
+            std::vector <double> output_data(this->output_layer->GetValuesNum());
+            for (uint32_t i = 0; i < this->output_layer->GetValuesNum(); ++i){
+                output_data[i] = std::stod(line_string_data[this->input_layer->GetValuesNum() + i]);
+            }
+
+            this->SetValues(input_data);
+            this->Predict();
+
+            std::vector <double> answers = this->output_layer->GetValues();
+
+            for (int i = 0; i < this->output_layer->GetValuesNum(); ++i){
+//                std::cout << answers[i] << " " << round(answers[i]) << "\t\t" << output_data[i];
+                if (round(answers[i]) != output_data[i]){
+//                    std::cout << " + \n";
+                    goto incorrect_answer;
+//                } else {
+//                    std::cout << '\n';
+                }
+            }
+
+            ++correct_answers;
+            // ну уж извините
+            incorrect_answer:
+            ++all_answers;
+        }
+
+        std::cout << correct_answers << "/" << all_answers << '\n';
+
+        std::map <Layer*, State> result;
+        for (auto layer_id : this->layers_ids){
+//            result.at(this->layers[layer_id]) = this->layers[layer_id]->GetState();
+            result.insert(std::make_pair(this->layers[layer_id], this->layers[layer_id]->GetState()));
+        }
+
+        this->epoch_states.push_back(result);
+
     }
     return this->epoch_states[epoch - 1];
 }
