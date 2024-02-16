@@ -657,10 +657,8 @@ void App::start_simulating() {
             }
         }
 
-        std::cout << "2\n";
         Model model(vgraph_, activations, values_nums, is_input, learning_rate, train_data, test_data);
-        std::cout << "3\n";
-        
+
         gotoSimulator();
     }
 }

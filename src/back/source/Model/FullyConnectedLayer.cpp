@@ -63,7 +63,7 @@ void FullyConnectedLayer::ConnectTo(Layer *input) {
        it_neuron < this->weights[input].end(); ++it_neuron) {
     for (auto it_weight = it_neuron->begin(); it_weight < it_neuron->end();
          ++it_weight) {
-      *it_weight = (static_cast<double>(rand()) / RAND_MAX) * 2 - 1;
+      *it_weight = ((static_cast<double>(rand()) / RAND_MAX) * 2 - 1) / this->values_num * 1.5;
     }
   }
 
@@ -134,7 +134,7 @@ void FullyConnectedLayer::Learn() {
     for (uint32_t neuron_index = 0; neuron_index < this->values_num;
          ++neuron_index) {
       this->errors[neuron_index] =
-          (this->values[neuron_index] - this->desired_values[neuron_index]);
+          2 * (this->values[neuron_index] - this->desired_values[neuron_index]);
       this->error += this->errors[neuron_index] * this->errors[neuron_index];
       this->loss += this->errors[neuron_index] * this->errors[neuron_index];
       total_error += this->errors[neuron_index];
@@ -175,6 +175,10 @@ void FullyConnectedLayer::Learn() {
                     this->activation_derivative(this->values_z[neuron_index]) *
                     this->weights[curr_layer][neuron_index][weight_index];
 
+//            std::cout << '\n' << "delta error: " << this->error *
+//                                                    this->activation_derivative(this->values_z[neuron_index]) *
+//                                                    this->weights[curr_layer][neuron_index][weight_index] << '\n';
+
             curr_layer->loss +=
                     (this->error *
                      this->activation_derivative(this->values_z[neuron_index]) *
@@ -182,6 +186,12 @@ void FullyConnectedLayer::Learn() {
                                                                                this->activation_derivative(
                                                                                        this->values_z[neuron_index]) *
                                                                                this->weights[curr_layer][neuron_index][weight_index]);
+//            std::cout << "delta loss: " << (this->error *
+//                                                     this->activation_derivative(this->values_z[neuron_index]) *
+//                                                     this->weights[curr_layer][neuron_index][weight_index]) * (this->error *
+//                                                                                                               this->activation_derivative(
+//                                                                                                                       this->values_z[neuron_index]) *
+//                                                                                                               this->weights[curr_layer][neuron_index][weight_index]) << '\n';
         }
       }
     }
