@@ -4,10 +4,12 @@
 #include "./FullyConnectedLayer.h"
 #include "./InputLayer.h"
 #include "./Layer.h"
+#include "./State.h"
 
 #include <map>
 #include <string>
 #include <vector>
+#include <fstream>
 
 class Model {
 private:
@@ -19,8 +21,11 @@ private:
   std::map<void *, bool> is_input;
 
   double learning_rate;
+
   std::string train_data_file_path;
+  std::ifstream train_data;
   std::string test_data_file_path;
+  std::ifstream test_data;
 
   std::vector<void *> layers_ids;
 
@@ -29,9 +34,11 @@ private:
   Layer* input_layer;
   Layer* output_layer;
 
-  std::vector <Layer*> forward_propogation_list;
-  std::vector <Layer*> backward_propogation_list;
+  std::vector <Layer*> forward_propagation_list;
+  std::vector <Layer*> backward_propagation_list;
 
+    std::vector <std::map <Layer*, State>> epoch_states;
+    std::vector <std::map <Layer*, State>> epoch_errors;
 
   std::vector <Layer*> Dfs(const std::map<Layer *, std::vector<Layer *>> &, Layer*);
 
@@ -51,6 +58,12 @@ public:
   void Predict();
 
   void Learn();
+
+  Layer* GetLayer(void*);
+
+//  State GetState(void *);
+
+  std::map <Layer*, State> SetEpoch(const uint32_t &);
 
   void TEST_function();
 };

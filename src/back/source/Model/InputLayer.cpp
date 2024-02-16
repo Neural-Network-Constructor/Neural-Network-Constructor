@@ -32,3 +32,7 @@ void InputLayer::PrintInfo() {
 
   std::cout << "┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙" << '\n';
 }
+
+State InputLayer::GetState() {
+    return State(this->values);
+}

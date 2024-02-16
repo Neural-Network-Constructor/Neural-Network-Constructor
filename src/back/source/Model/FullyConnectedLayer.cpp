@@ -129,10 +129,14 @@ void FullyConnectedLayer::SetDesiredValues(
 void FullyConnectedLayer::Learn() {
   double total_error = 0;
   if (this->is_output) {
+    this->error = 0;
+    this->loss = 0;
     for (uint32_t neuron_index = 0; neuron_index < this->values_num;
          ++neuron_index) {
       this->errors[neuron_index] =
           (this->values[neuron_index] - this->desired_values[neuron_index]);
+      this->error += this->errors[neuron_index] * this->errors[neuron_index];
+      this->loss += this->errors[neuron_index] * this->errors[neuron_index];
       total_error += this->errors[neuron_index];
     }
   } else {
@@ -152,10 +156,33 @@ void FullyConnectedLayer::Learn() {
         this->weights[curr_layer][neuron_index][weight_index] -=
             d_weight * this->learning_rate;
 
-        curr_layer->error +=
-            this->errors[neuron_index] *
-            this->activation_derivative(this->values_z[neuron_index]) *
-            this->weights[curr_layer][neuron_index][weight_index];
+        if (this->is_output) {
+            curr_layer->error +=
+                    this->errors[neuron_index] *
+                    this->activation_derivative(this->values_z[neuron_index]) *
+                    this->weights[curr_layer][neuron_index][weight_index];
+
+            curr_layer->loss +=
+                    (this->errors[neuron_index] *
+                     this->activation_derivative(this->values_z[neuron_index]) *
+                     this->weights[curr_layer][neuron_index][weight_index]) * (this->errors[neuron_index] *
+                                                                               this->activation_derivative(
+                                                                                       this->values_z[neuron_index]) *
+                                                                               this->weights[curr_layer][neuron_index][weight_index]);
+        } else {
+            curr_layer->error +=
+                    this->error *
+                    this->activation_derivative(this->values_z[neuron_index]) *
+                    this->weights[curr_layer][neuron_index][weight_index];
+
+            curr_layer->loss +=
+                    (this->error *
+                     this->activation_derivative(this->values_z[neuron_index]) *
+                     this->weights[curr_layer][neuron_index][weight_index]) * (this->error *
+                                                                               this->activation_derivative(
+                                                                                       this->values_z[neuron_index]) *
+                                                                               this->weights[curr_layer][neuron_index][weight_index]);
+        }
       }
     }
     double d_bias =
@@ -163,8 +190,18 @@ void FullyConnectedLayer::Learn() {
     this->biases[neuron_index] -= d_bias * this->learning_rate;
   }
 
-  this->error = 0;
+  // this->error = 0;
   // std::cout << "сам обучись сука \t"
   //           << "error = " << total_error << " / " << this->desired_values[0]
   //           << ' ' << this->values[0] << '\n';
+}
+
+State FullyConnectedLayer::GetState() {
+    std::vector <std::vector <std::vector <double>>> result_weights;
+
+    for (auto& connection : this->weights){
+        result_weights.push_back(connection.second);
+    }
+
+    return State(this->values, this->biases, result_weights);
 }

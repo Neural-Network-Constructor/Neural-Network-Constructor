@@ -1,13 +1,5 @@
 #include "./Layer.h"
 
-// Layer::Layer(uint32_t inputs_num, uint32_t outputs_num, uint32_t values_num)
-// {
-//   this->inputs_num = inputs_num;
-//   this->outputs_num = outputs_num;
-//   this->values_num = values_num;
-//   this->
-// };
-
 Layer::Layer(const uint32_t &values_num,
              const std::function<double(double)> &activation,
              const std::function<double(double)> &activation_derivative, const double &learning_rate) {

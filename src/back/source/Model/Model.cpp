@@ -17,8 +17,10 @@ Model::Model(
   this->is_input = is_input;
 
   this->learning_rate = learning_rate;
-  this->test_data_file_path = test_data;
   this->train_data_file_path = train_data;
+  this->train_data.open(train_data);
+  this->test_data_file_path = test_data;
+  this->test_data.open(test_data);
 
   for (auto curr_activation : activations_ints) {
     if (curr_activation.second == 1) {
@@ -96,7 +98,7 @@ void Model::ForwardDfs() {
     }
   }
 
-  this->forward_propogation_list = this->Dfs(graph, this->output_layer);
+  this->forward_propagation_list = this->Dfs(graph, this->output_layer);
 
 }
 
@@ -112,7 +114,7 @@ void Model::BackwardDfs() {
     }
   }
 
-  this->backward_propogation_list = this->Dfs(graph, this->input_layer);
+  this->backward_propagation_list = this->Dfs(graph, this->input_layer);
 }
 
 std::vector<Layer *>
@@ -148,16 +150,18 @@ Model::Dfs(const std::map<Layer *, std::vector<Layer *>> &graph, Layer *from) {
 }
 
 void Model::Predict() {
-  for (auto curr = this->forward_propogation_list.begin();
-       curr < this->forward_propogation_list.end(); ++curr) {
-    (*curr)->Predict();
+  for (auto curr = this->backward_propagation_list.begin();
+       curr < this->backward_propagation_list.end(); ++curr) {
+//      std::cout << "Predict (" << *curr << ")" << '\n';
+      (*curr)->Predict();
   }
 }
 
 void Model::Learn() {
-  for (auto curr = this->backward_propogation_list.begin();
-       curr < this->backward_propogation_list.end(); ++curr) {
-    (*curr)->Learn();
+  for (auto curr = this->forward_propagation_list.begin();
+       curr < this->forward_propagation_list.end(); ++curr) {
+//      std::cout << "Learn (" << *curr << ")" << '\n';
+      (*curr)->Learn();
   }
 }
 
@@ -165,7 +169,7 @@ void Model::TEST_function() {
   this->ForwardDfs();
   this->BackwardDfs();
 
-  int q = 500;
+  int q = 40000;
 
   std::vector<std::vector<double>> values_in;
   std::vector<std::vector<double>> values_out;
@@ -190,9 +194,50 @@ void Model::TEST_function() {
     this->Predict();
 
     // std::cout << values_out[i][0] << ": " << this->output_layer->GetValues()[0] << '\n';
-    std::cout << (values_out[i][0] - this->output_layer->GetValues()[0]) * (values_out[i][0] - this->output_layer->GetValues()[0]) << '\n';
+    std::cout << i << "/" << q << ": " << (values_out[i][0] - this->output_layer->GetValues()[0]) * (values_out[i][0] - this->output_layer->GetValues()[0]) << '\n';
 
     this->SetDesiredValues(values_out[i]);
     this->Learn();
+
+//    for (void* curr_layer : this->layers_ids){
+//      std::cout << this->layers[curr_layer] << ": " << this->layers[curr_layer]->error;
+//      if (this->layers[curr_layer] == this->input_layer){
+//        std::cout << "\t (input)";
+//      } else if (this->layers[curr_layer] == this->output_layer){
+//        std::cout << "\t (output)";
+//      }
+//      std::cout << '\n';
+//        this->layers[curr_layer]->error = 0;
+//        this->layers[curr_layer]->loss = 0;
+//    }
+
+//    std::cout << "---" << '\n';
   }
+
+    for (auto curr_layer : this->layers) {
+        curr_layer.second->PrintInfo();
+        std::cout << "\n\n";
+    }
+}
+
+//State Model::GetState(void *layer_id) {
+//    return this->layers[layer_id]->GetState();
+//}
+
+Layer* Model::GetLayer(void* layer_id){
+    return this->layers[layer_id];
+}
+
+std::map <Layer*, State> Model::SetEpoch(const uint32_t &epoch) {
+    while(this->epoch_states.size() < epoch){
+        this->train_data.clear();
+        this->train_data.seekg(0);
+        this->test_data.clear();
+        this->test_data.seekg(0);
+
+        while(!train_data.eof()){
+            std::cout << "q";
+        }
+    }
+    return this->epoch_states[epoch - 1];
 }

@@ -21,8 +21,8 @@ find_package(Qt6 COMPONENTS
 
 add_library(libNNC SHARED IMPORTED)
 set_target_properties(libNNC PROPERTIES IMPORTED_LOCATION
-  ../libNNC/libNNC.so.1.0.0
-  # ./src/back/build_lib/libNNC.so.1.0.0
+  ../libNNC/libNNC_lib.so.1.0.0
+  # ./src/back/build_lib/libNNC_lib.so.1.0.0
 )
 target_include_directories(libNNC INTERFACE ./src/back/source/)
 
